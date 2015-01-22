@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>917E9F5D-BC40-4682-BFBA-A951F58601CB</string>
+	<key>IDESourceControlProjectName</key>
+	<string>CAPlayThrough</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>85CEAA2B40F60D1ADE89F6B289E400FEE6526108</key>
+		<string>https://github.com/JesseHsiu/CAPlayThrough.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>CAPlayThrough.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>85CEAA2B40F60D1ADE89F6B289E400FEE6526108</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/JesseHsiu/CAPlayThrough.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>85CEAA2B40F60D1ADE89F6B289E400FEE6526108</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>85CEAA2B40F60D1ADE89F6B289E400FEE6526108</string>
+			<key>IDESourceControlWCCName</key>
+			<string>CAPlayThrough</string>
+		</dict>
+	</array>
+</dict>
+</plist>
