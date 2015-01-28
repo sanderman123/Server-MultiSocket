@@ -144,10 +144,6 @@ void* initializeInstance(void *THIS){
     [server createServerOnPort:[tfPort intValue]];
     serverStarted = true;
     
-    
-    
-//    tableData = [[NSMutableArray alloc] initWithObjects:@"March",@"April",@"May", nil];
-    
     tableContainer = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 0, 148, 148)];
     tableview = [[NSTableView alloc]initWithFrame:NSMakeRect(0, 0, 148, 148)];
     
@@ -165,13 +161,6 @@ void* initializeInstance(void *THIS){
     [tableContainer setDocumentView:tableview];
     [tableContainer setHasVerticalScroller:YES];
     [_sharedCAPlayThroughObjC addSubview:tableContainer];
-    
-//        NSTableColumn *column = [[NSTableColumn alloc]initWithIdentifier:@"MainCell"];
-//        [column setTableView:tableview];
-//    tableview.delegate = self;
-//    tableview.dataSource = self;
-//    
-//    [[CAPlayThroughObjC sharedCAPlayThroughObjC:nil] addSubview:tableview];
 }
 
 -(void)btnStartStreamClicked:(id)sender{
@@ -234,40 +223,15 @@ void* initializeInstance(void *THIS){
     
     
     if (result == nil) {
-        
-        // Create the new NSTextField with a frame of the {0,0} with the width of the table.
-        // Note that the height of the frame is not really relevant, because the row height will modify the height.
         result = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 148, 10)];
-        
-        // The identifier of the NSTextField instance is set to MyView.
-        // This allows the cell to be reused.
         result.identifier = @"MainCell";
+        result.bordered = false;
     }
-    
-    // result is now guaranteed to be valid, either as a reused cell
-    // or as a new cell, so set the stringValue of the cell to the
-    // nameArray value at row
     result.stringValue = @"wahaha";
     
     // Return the result
     return result;
     
-    
-//    NSLog(@"called");
-//    NSTableCellView *cellView = [tableView makeViewWithIdentifier:@"MainCell" owner:self];
-//    cellView.backgroundStyle = NSBackgroundStyleDark;
-//    [cellView.textField setStringValue:@"cool!!!"];
-    
-//    NSTextField *tmp = [[NSTextField alloc]initWithFrame:NSMakeRect(0, 0, 50, 50)];
-//    [tmp setStringValue:@"cool"];
-//    [cellView addSubview:tmp];
-    
-//    cellView.textField.stringValue = self.tableArray[row][@"textValue1"];
-//    cellView.imageView.image = [NSImage imageNamed:self.tableArray[row][@"image1"]];
-//    cellView.secondTextField.stringValue = self.tableArray[row][@"textValue2"];
-//    cellView.secondImageView.image = [NSImage imageNamed:self.tableArray[row][@"image2"]];
-    
-//    return cellView;
 }
 
 @end
