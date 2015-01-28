@@ -124,7 +124,7 @@ void	AudioDevice::Init(AudioDeviceID devid, bool isInput)
 //
     
 //    SetBufferSize(128);
-    SetBufferSize(256);
+    SetBufferSize(128);
 
     
 //    printf("mid: %d / size %d / safety %d / latency %d\n",(unsigned int)mID,(unsigned int)mBufferSizeFrames,(unsigned int)mSafetyOffset, latency   );
