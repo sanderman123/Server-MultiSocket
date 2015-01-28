@@ -16,7 +16,7 @@
 #import "Server.h"
 
 // An Objective-C class that needs to be accessed from C++
-@interface CAPlayThroughObjC : NSView
+@interface CAPlayThroughObjC : NSView<NSTableViewDataSource,NSTableViewDelegate>
 {
     AudioBufferList *abl;
     NSMutableData *mutableData;
@@ -24,6 +24,9 @@
     Byte *byteData2;// = (Byte*) malloc(l);
     
     bool already_init;
+    
+    NSTableView *tableview;
+    NSScrollView * tableContainer;
     
 }
 

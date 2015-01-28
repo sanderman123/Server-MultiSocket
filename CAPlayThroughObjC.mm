@@ -143,6 +143,35 @@ void* initializeInstance(void *THIS){
 -(void)btnStartServerClicked:(id)sender{
     [server createServerOnPort:[tfPort intValue]];
     serverStarted = true;
+    
+    
+    
+//    tableData = [[NSMutableArray alloc] initWithObjects:@"March",@"April",@"May", nil];
+    
+    tableContainer = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 0, 148, 148)];
+    tableview = [[NSTableView alloc]initWithFrame:NSMakeRect(0, 0, 148, 148)];
+    
+    [tableview setDataSource:self];
+    [tableview setDelegate:self];
+    
+    NSTableColumn * column1 = [[NSTableColumn alloc] initWithIdentifier:@"MainCell"];
+    [[column1 headerCell] setStringValue:@"name"];
+    [column1 setWidth:148];
+    [tableview addTableColumn:column1];
+    [tableview reloadData];
+    
+    
+    
+    [tableContainer setDocumentView:tableview];
+    [tableContainer setHasVerticalScroller:YES];
+    [_sharedCAPlayThroughObjC addSubview:tableContainer];
+    
+//        NSTableColumn *column = [[NSTableColumn alloc]initWithIdentifier:@"MainCell"];
+//        [column setTableView:tableview];
+//    tableview.delegate = self;
+//    tableview.dataSource = self;
+//    
+//    [[CAPlayThroughObjC sharedCAPlayThroughObjC:nil] addSubview:tableview];
 }
 
 -(void)btnStartStreamClicked:(id)sender{
@@ -164,7 +193,81 @@ void* initializeInstance(void *THIS){
             streaming = false;
         }
     }
+}
 
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
+{
+
+    return 10;
+}
+//- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row;
+//{
+//    NSLog(@"called2");
+////    id returnValue=nil;
+////    
+////    // The column identifier string is the easiest way to identify a table column.
+////    NSString *columnIdentifer = [tableColumn identifier];
+////    NSLog(@"%@",columnIdentifer);
+////    
+////    // Get the name at the specified row in namesArray
+////    NSString *theName = @"yay";//[namesArray objectAtIndex:rowIndex];
+////    
+////    
+////    
+////    // Compare each column identifier and set the return value to
+////    // the Person field value appropriate for the column.
+////    if ([columnIdentifer isEqualToString:@"MainCell"]) {
+////        returnValue = theName;
+////    }
+////    
+////    
+////    return returnValue;
+//    return @"perfect";
+//}
+- (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
+{
+    return 30;
+}
+- (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+    NSTextField *result = [tableView makeViewWithIdentifier:@"MainCell" owner:self];
+    
+    
+    if (result == nil) {
+        
+        // Create the new NSTextField with a frame of the {0,0} with the width of the table.
+        // Note that the height of the frame is not really relevant, because the row height will modify the height.
+        result = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 148, 10)];
+        
+        // The identifier of the NSTextField instance is set to MyView.
+        // This allows the cell to be reused.
+        result.identifier = @"MainCell";
+    }
+    
+    // result is now guaranteed to be valid, either as a reused cell
+    // or as a new cell, so set the stringValue of the cell to the
+    // nameArray value at row
+    result.stringValue = @"wahaha";
+    
+    // Return the result
+    return result;
+    
+    
+//    NSLog(@"called");
+//    NSTableCellView *cellView = [tableView makeViewWithIdentifier:@"MainCell" owner:self];
+//    cellView.backgroundStyle = NSBackgroundStyleDark;
+//    [cellView.textField setStringValue:@"cool!!!"];
+    
+//    NSTextField *tmp = [[NSTextField alloc]initWithFrame:NSMakeRect(0, 0, 50, 50)];
+//    [tmp setStringValue:@"cool"];
+//    [cellView addSubview:tmp];
+    
+//    cellView.textField.stringValue = self.tableArray[row][@"textValue1"];
+//    cellView.imageView.image = [NSImage imageNamed:self.tableArray[row][@"image1"]];
+//    cellView.secondTextField.stringValue = self.tableArray[row][@"textValue2"];
+//    cellView.secondImageView.image = [NSImage imageNamed:self.tableArray[row][@"image2"]];
+    
+//    return cellView;
 }
 
 @end
