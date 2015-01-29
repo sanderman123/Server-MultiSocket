@@ -16,7 +16,7 @@
 #import "Server.h"
 
 // An Objective-C class that needs to be accessed from C++
-@interface CAPlayThroughObjC : NSView
+@interface CAPlayThroughObjC : NSView<NSTableViewDataSource,NSTableViewDelegate>
 {
     AudioBufferList *abl;
     NSMutableData *mutableData;
@@ -25,11 +25,16 @@
     
     bool already_init;
     
+    NSTableView *tableview;
+    NSScrollView * tableContainer;
+
+    bool initializedChannels;
 }
 
 @property (nonatomic,strong) Server* server;
 @property (nonatomic,assign) bool streaming;
 @property (nonatomic,assign) bool serverStarted;
+@property (nonatomic, assign) int numChannels;
 //+(CAPlayThroughObjC*)sharedCAPlayThroughObjC;
 +(CAPlayThroughObjC*)sharedCAPlayThroughObjC:(CAPlayThroughObjC*) Playthrough;
 
@@ -37,10 +42,12 @@
 - (void) encodeAudioBufferList:(AudioBufferList *)abl;
 - (AudioBufferList *) decodeAudioBufferList: (NSData *) data;
 
+- (void) refreshConnectedClients;
+
 @property (nonatomic, strong)IBOutlet NSButton *btnStartServer;
 @property (nonatomic, strong)IBOutlet NSButton *btnStartStream;
 @property (nonatomic, strong)IBOutlet NSTextField *tfPort;
-
+@property (nonatomic, strong)IBOutlet NSTextField *labelChannels;
 
 -(IBAction)btnStartServerClicked:(id)sender;
 -(IBAction)btnStartStreamClicked:(id)sender;

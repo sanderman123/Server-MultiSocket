@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
 #import "GCDAsyncUdpSocket.h"
+//#import "CAPlayThroughObjC.h"
 
 @interface Server : NSObject <NSApplicationDelegate, GCDAsyncUdpSocketDelegate>{
     GCDAsyncUdpSocket *udpSocket;
@@ -16,11 +17,14 @@
     UInt16 port;
     NSMutableArray *clientAddresses;
     NSMutableArray *clients;
+    NSMutableArray *clientNames;
     int tag;
     int clientCount;
 }
 
 //- (id) init;
+
+- (void) initializeClient: (NSData*) address;
 
 - (void) createServerOnPort: (UInt16) port;
 
@@ -28,6 +32,8 @@
 
 - (void) udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext;
 
-- (void) addClient: (NSData *) address;
+- (void) addClient: (NSData *) address name: (NSString*) name;
+
+- (NSMutableArray*)getClientNames;
 
 @end

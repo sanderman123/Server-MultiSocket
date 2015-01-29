@@ -7,7 +7,7 @@
 //
 
 #import "Server.h"
-
+#import "CAPlayThroughObjC.h"
 @implementation Server
 
 - (void) createServerOnPort: (UInt16) p {
@@ -30,6 +30,7 @@
     
     clientAddresses = [[NSMutableArray alloc] init];
     clients = [[NSMutableArray alloc]init];
+    clientNames = [[NSMutableArray alloc]init];
     clientCount = 0;
     tag = 0;
     
@@ -43,11 +44,12 @@
     tag++;
 }
 
-
--(void)addClient:(NSData *)address{
+-(void)addClient:(NSData *)address name:(NSString *) name{
     clientCount++;
     
     [clientAddresses addObject: address];
+    [clientNames addObject: name];
+    [[CAPlayThroughObjC sharedCAPlayThroughObjC:nil] refreshConnectedClients];
     
     //Open a new socket
     [clients addObject: [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)]];
@@ -60,6 +62,19 @@
     } else {
         NSLog(@"Client socket added on port: %i", uniquePort);
     }
+    
+    [self initializeClient:address];
+}
+
+-(void)initializeClient:(NSData *)address {
+    int nc = [CAPlayThroughObjC sharedCAPlayThroughObjC:nil].numChannels;
+    NSString *str = [NSString stringWithFormat:@"%i",nc];
+    NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
+    [udpSocket sendData:data toAddress:address withTimeout:-1 tag:tag];
+}
+
+- (NSMutableArray*)getClientNames{
+    return clientNames;
 }
 
 
@@ -67,7 +82,8 @@
     
     NSLog(@"Received data with length: %lu", (unsigned long)data.length);
     
-    NSLog(@"Data: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+    NSString *clientName = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"Data: %@", clientName);
     
     BOOL known = false;
     for (NSData *c in clientAddresses){
@@ -77,7 +93,7 @@
         }
     }
     if (!known) {
-        [self addClient:address];
+        [self addClient:address name:clientName];
     }
 }
 

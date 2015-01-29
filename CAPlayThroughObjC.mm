@@ -52,6 +52,7 @@ void* initializeInstance(void *THIS){
     
     return nil;
 }
+
 -(void)initVariables
 {
     if (abl == Nil) {
@@ -80,6 +81,10 @@ void* initializeInstance(void *THIS){
         
         [server send:mutableData];
        // return mutableData;
+    } else if (serverStarted && !initializedChannels){
+        _numChannels = ablist->mNumberBuffers;
+        [_labelChannels setStringValue:[NSString stringWithFormat:@"%@ %i",_labelChannels.stringValue, _numChannels]];
+        initializedChannels = true;
     }
 }
 
@@ -143,6 +148,24 @@ void* initializeInstance(void *THIS){
 -(void)btnStartServerClicked:(id)sender{
     [server createServerOnPort:[tfPort intValue]];
     serverStarted = true;
+    
+    tableContainer = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 0, 148, 148)];
+    tableview = [[NSTableView alloc]initWithFrame:NSMakeRect(0, 0, 148, 148)];
+    
+    [tableview setDataSource:self];
+    [tableview setDelegate:self];
+    
+    NSTableColumn * column1 = [[NSTableColumn alloc] initWithIdentifier:@"www"];
+    [[column1 headerCell] setStringValue:@"Connected Clients"];
+    [column1 setWidth:148];
+    [tableview addTableColumn:column1];
+//    [tableview reloadData];
+    
+    
+    
+    [tableContainer setDocumentView:tableview];
+    [tableContainer setHasVerticalScroller:YES];
+    [_sharedCAPlayThroughObjC addSubview:tableContainer];
 }
 
 -(void)btnStartStreamClicked:(id)sender{
@@ -164,7 +187,63 @@ void* initializeInstance(void *THIS){
             streaming = false;
         }
     }
+}
 
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
+{
+
+    NSMutableArray *names = [server getClientNames];
+    NSLog(@"%lu",(unsigned long)[names count]);
+    return [names count];
+}
+//- (id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row;
+//{
+//    NSLog(@"called2");
+////    id returnValue=nil;
+////    
+////    // The column identifier string is the easiest way to identify a table column.
+////    NSString *columnIdentifer = [tableColumn identifier];
+////    NSLog(@"%@",columnIdentifer);
+////    
+////    // Get the name at the specified row in namesArray
+////    NSString *theName = @"yay";//[namesArray objectAtIndex:rowIndex];
+////    
+////    
+////    
+////    // Compare each column identifier and set the return value to
+////    // the Person field value appropriate for the column.
+////    if ([columnIdentifer isEqualToString:@"MainCell"]) {
+////        returnValue = theName;
+////    }
+////    
+////    
+////    return returnValue;
+//    return @"perfect";
+//}
+- (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
+{
+    return 30;
+}
+- (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+{
+    NSTextField *result = [tableView makeViewWithIdentifier:@"MainCell" owner:self];
+    NSMutableArray *names = [server getClientNames];
+    
+    
+    if (result == nil) {
+        result = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 148, 10)];
+        result.identifier = @"MainCell";
+        result.bordered = false;
+    }
+    result.stringValue = [names objectAtIndex:row];
+    
+    // Return the result
+    return result;
+    
+}
+
+-(void)refreshConnectedClients{
+    [tableview reloadData];
 }
 
 @end
