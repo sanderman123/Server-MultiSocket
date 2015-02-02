@@ -25,10 +25,15 @@
     
     bool already_init;
     
-    NSTableView *tableview;
-    NSScrollView * tableContainer;
+    NSTableView *clientsTableView;
+    NSScrollView *clientsTableContainer;
+    
+    NSTableView *channelsTableView;
+    NSScrollView *channelsTableContainer;
 
     bool initializedChannels;
+    NSMutableArray *channelNames;
+    int selectedRow;
 }
 
 @property (nonatomic,strong) Server* server;
