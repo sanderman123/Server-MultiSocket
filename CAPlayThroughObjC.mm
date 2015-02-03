@@ -17,6 +17,7 @@ static CAPlayThroughObjC* _sharedCAPlayThroughObjC = nil;
 @synthesize btnStartStream;
 @synthesize btnStartServer;
 @synthesize tfPort;
+@synthesize channelNames;
 
 static int TextFieldContext = 0;
 
@@ -84,7 +85,7 @@ void* initializeInstance(void *THIS){
             [mutableData appendBytes:frame length:ab.mDataByteSize];
         }
         
-        [server send:mutableData];
+        [server sendToAll:mutableData];
         // return mutableData;
     } else if (serverStarted && !initializedChannels){
         _numChannels = ablist->mNumberBuffers;
@@ -295,7 +296,7 @@ void* initializeInstance(void *THIS){
     NSString *string = [[[obj object] selectedCell] stringValue];
     [channelNames replaceObjectAtIndex:(NSUInteger)selectedRow withObject:string];
     //inform clients of new channel name
-    //...
+    [server sendUpdateToClients];
 }
 
 -(void)controlTextDidChange:(NSNotification *)obj{

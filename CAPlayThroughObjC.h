@@ -32,7 +32,6 @@
     NSScrollView *channelsTableContainer;
 
     bool initializedChannels;
-    NSMutableArray *channelNames;
     int selectedRow;
 }
 
@@ -40,6 +39,7 @@
 @property (nonatomic,assign) bool streaming;
 @property (nonatomic,assign) bool serverStarted;
 @property (nonatomic, assign) int numChannels;
+@property (nonatomic, assign) NSMutableArray *channelNames;
 //+(CAPlayThroughObjC*)sharedCAPlayThroughObjC;
 +(CAPlayThroughObjC*)sharedCAPlayThroughObjC:(CAPlayThroughObjC*) Playthrough;
 

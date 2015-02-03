@@ -37,7 +37,7 @@
     NSLog(@"UDP server started on port %i", port);
 }
 
-- (void) send: (NSData *) data {
+- (void) sendToAll: (NSData *) data {
     for (int i = 0; i < clientCount; i++){
         [clients[i] sendData:data toAddress:clientAddresses[i] withTimeout:-1 tag:tag];
     }
@@ -67,10 +67,28 @@
 }
 
 -(void)initializeClient:(NSData *)address {
-    int nc = [CAPlayThroughObjC sharedCAPlayThroughObjC:nil].numChannels;
-    NSString *str = [NSString stringWithFormat:@"%i",nc];
-    NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSData *data = [self getChannelNamesAsData];
     [udpSocket sendData:data toAddress:address withTimeout:-1 tag:tag];
+}
+
+-(void)sendUpdateToClients{
+    NSData* data = [self getChannelNamesAsData];
+    [self sendToAll:data];
+}
+
+-(NSData *)getChannelNamesAsData{
+    NSArray *cnames = [CAPlayThroughObjC sharedCAPlayThroughObjC:nil].channelNames;
+    NSString *str = @"";
+    
+    for(int i = 0; i < (int)cnames.count; i++){
+        if(i > 0){
+            str = [str stringByAppendingString:@":"];
+        }
+        str = [str stringByAppendingString:[NSString stringWithFormat:@"%@",[cnames objectAtIndex:i]]];
+    }
+    NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
+    return data;
 }
 
 - (NSMutableArray*)getClientNames{

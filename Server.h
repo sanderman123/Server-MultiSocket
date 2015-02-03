@@ -26,9 +26,13 @@
 
 - (void) initializeClient: (NSData*) address;
 
+- (void) sendUpdateToClients;
+
+- (NSData*) getChannelNamesAsData;
+
 - (void) createServerOnPort: (UInt16) port;
 
-- (void) send: (NSData *) data;
+- (void) sendToAll: (NSData *) data;
 
 - (void) udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext;
 
