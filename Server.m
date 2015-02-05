@@ -77,6 +77,19 @@
     [self sendToAll:data];
 }
 
+-(void)sendChannelImageToClients:(NSString*)name format:(NSString*) format index:(int)index{
+    //NSArray *images = [CAPlayThroughObjC sharedCAPlayThroughObjC:nil].channelImages;
+   // NSImage *image = [images objectAtIndex:index];
+    NSString *str = [NSString stringWithFormat:@"image:%i:%@:%@",index,name,format];
+    NSData *strData = [str dataUsingEncoding:NSUTF8StringEncoding];
+    [self sendToAll:strData];
+    
+    
+//    NSData *imageData = [[NSData alloc]initWithData:[image TIFFRepresentation]];
+//    imageData = [image TIFFRepresentation];
+//    [self sendToAll:imageData];
+}
+
 -(NSData *)getChannelNamesAsData{
     NSArray *cnames = [CAPlayThroughObjC sharedCAPlayThroughObjC:nil].channelNames;
     NSString *str = @"";

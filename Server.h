@@ -28,6 +28,9 @@
 
 - (void) sendUpdateToClients;
 
+//- (void)sendChannelImageToClients:(NSImage*)image index:(int)index;
+-(void)sendChannelImageToClients:(NSString*)name format:(NSString*) format index:(int)index;
+
 - (NSData*) getChannelNamesAsData;
 
 - (void) createServerOnPort: (UInt16) port;

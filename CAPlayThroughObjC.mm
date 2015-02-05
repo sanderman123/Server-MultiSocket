@@ -18,6 +18,7 @@ static CAPlayThroughObjC* _sharedCAPlayThroughObjC = nil;
 @synthesize btnStartServer;
 @synthesize tfPort;
 @synthesize channelNames;
+@synthesize channelImages;
 
 static int TextFieldContext = 0;
 
@@ -65,6 +66,28 @@ void* initializeInstance(void *THIS){
         streaming = false;
         server = [[[Server alloc] init] retain];
         
+//        NSURL *furl = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:@"black.jpeg"]];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"music-note" ofType:@"png"];
+        NSURL *furl = [NSURL fileURLWithPath: path];
+        defaultImage = [[NSImage alloc] init];
+        [defaultImage initWithContentsOfURL:furl];
+
+//        NSOpenPanel *panel = [NSOpenPanel openPanel];
+//        [panel setCanChooseFiles:YES];
+//        [panel setCanChooseDirectories:NO];
+//        [panel setAllowsMultipleSelection:NO]; // yes if more than one file/dir is allowed
+//        
+//        NSInteger clicked = [panel runModal];
+//        
+//        if (clicked == NSFileHandlingPanelOKButton) {
+//            for (NSURL *url in [panel URLs]) {
+//                // do something with the url here.
+//                defaultImage = [[NSImage alloc] initWithContentsOfURL:url];
+//            }
+//        }
+
+        
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(controlTextDidEndEditing:) name:NSControlTextDidChangeNotification object:nil];
 
     }
@@ -88,14 +111,18 @@ void* initializeInstance(void *THIS){
         [server sendToAll:mutableData];
         // return mutableData;
     } else if (serverStarted && !initializedChannels){
+        initializedChannels = true;
+        
         _numChannels = ablist->mNumberBuffers;
         [_labelChannels setStringValue:[NSString stringWithFormat:@"%@ %i",_labelChannels.stringValue, _numChannels]];
         channelNames = [[NSMutableArray alloc] init];
+        channelImages = [[NSMutableArray alloc] init];
         NSLog(@"Numchannels %i", _numChannels);
         for(int i = 0; i < _numChannels;i++){
             [channelNames addObject:[NSString stringWithFormat:@"Channel %i",i+1]];
+            [channelImages addObject:defaultImage];
+            
         }
-        initializedChannels = true;
     }
 }
 
@@ -183,25 +210,30 @@ void* initializeInstance(void *THIS){
     [_sharedCAPlayThroughObjC addSubview:clientsTableContainer];
     clientsTableView.tag = 0;
     
-    channelsTableContainer = [[NSScrollView alloc] initWithFrame:NSMakeRect(200, 0, 200, 200)];
-    channelsTableView = [[NSTableView alloc]initWithFrame:NSMakeRect(0, 0, 200, 200)];
+    channelsTableContainer = [[NSScrollView alloc] initWithFrame:NSMakeRect(200, 0, 230, 200)];
+    channelsTableView = [[NSTableView alloc]initWithFrame:NSMakeRect(0, 0, 230, 200)];
     
     [channelsTableView setDataSource:self];
     [channelsTableView setDelegate:self];
     
-    NSTableColumn * columnA = [[NSTableColumn alloc] initWithIdentifier:@"www"];
-    NSTableColumn * columnB = [[NSTableColumn alloc] initWithIdentifier:@"www"];
-    [[columnA headerCell] setStringValue:@"No"];
-    [[columnB headerCell] setStringValue:@"Name"];
-    [columnA setWidth:20];
-    [columnB setWidth:180];
-    [channelsTableView addTableColumn:columnA];
-    [channelsTableView addTableColumn:columnB];
+    NSTableColumn * columnIndex = [[NSTableColumn alloc] initWithIdentifier:@"index"];
+    NSTableColumn * columnName = [[NSTableColumn alloc] initWithIdentifier:@"name"];
+    NSTableColumn * columnImage = [[NSTableColumn alloc] initWithIdentifier:@"image"];
+    [[columnIndex headerCell] setStringValue:@"No"];
+    [[columnName headerCell] setStringValue:@"Name"];
+    [[columnImage headerCell] setStringValue:@"Img"];
+    [columnIndex setWidth:20];
+    [columnName setWidth:160];
+    [columnImage setWidth:20];
+    [channelsTableView addTableColumn:columnIndex];
+    [channelsTableView addTableColumn:columnName];
+    [channelsTableView addTableColumn:columnImage];
     
     [channelsTableContainer setDocumentView:channelsTableView];
     [channelsTableContainer setHasVerticalScroller:YES];
     [_sharedCAPlayThroughObjC addSubview:channelsTableContainer];
     
+    [channelsTableView setDoubleAction:@selector(doubleClick:)];
     channelsTableView.tag = 1;
     [channelsTableView reloadData];
 }
@@ -281,8 +313,14 @@ void* initializeInstance(void *THIS){
     } else {
         if(tableView.tableColumns[0] == tableColumn){
             result.stringValue = [NSString stringWithFormat:@"%li",row + 1];
-        } else {
+        } else if(tableView.tableColumns[1] == tableColumn){
             result.stringValue = [channelNames objectAtIndex:row];
+        } else {
+            if((int)channelImages.count == _numChannels){
+                NSImageView *image = [[NSImageView alloc] initWithFrame:NSMakeRect(0, 0, 20, 20)];
+                [image setImage:[channelImages objectAtIndex:row]];
+                return image;
+            }
         }
     }
     return result;
@@ -299,16 +337,46 @@ void* initializeInstance(void *THIS){
     [server sendUpdateToClients];
 }
 
--(void)controlTextDidChange:(NSNotification *)obj{
-    NSLog(@"Yaay");
-}
-
--(void)controlTextDidBeginEditing:(NSNotification *)obj{
-    NSLog(@"BOEE");
-}
-
 -(void)refreshConnectedClients{
     [clientsTableView reloadData];
+}
+
+- (void)doubleClick:(id)object {
+    // This gets called after following steps 1-3.
+    if(object == channelsTableView){
+        NSInteger rowNumber = [channelsTableView clickedRow];
+        NSInteger colNumber = [channelsTableView clickedColumn];
+        
+        if(colNumber == 2){
+            NSImage *image = [[NSImage alloc]init];
+            image = [[NSImage alloc]init];
+            
+            NSOpenPanel *panel = [NSOpenPanel openPanel];
+            [panel setCanChooseFiles:YES];
+            [panel setCanChooseDirectories:NO];
+            [panel setAllowsMultipleSelection:NO]; // yes if more than one file/dir is allowed
+            
+            NSInteger clicked = [panel runModal];
+            NSString *fileName = [[NSString alloc] init];
+            NSString *fileExtension = [[NSString alloc] init];
+            
+            if (clicked == NSFileHandlingPanelOKButton) {
+                for (NSURL *url in [panel URLs]) {
+                    [image initWithContentsOfURL:url];
+                    fileExtension = [url pathExtension];
+                    url = [url URLByDeletingPathExtension];
+                    fileName = [url lastPathComponent];
+                    
+                    // do something with the url here.
+                    //image = [[NSImage alloc] initWithContentsOfURL:url];
+                }
+                [channelImages replaceObjectAtIndex:rowNumber withObject:image];
+//                [server sendChannelImageToClients:image index:rowNumber];
+                [server sendChannelImageToClients:fileName format:fileExtension index:rowNumber];
+                [channelsTableView reloadData];
+            }
+        }
+    }
 }
 
 @end

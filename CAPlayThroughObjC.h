@@ -30,6 +30,8 @@
     
     NSTableView *channelsTableView;
     NSScrollView *channelsTableContainer;
+    
+    NSImage *defaultImage;
 
     bool initializedChannels;
     int selectedRow;
@@ -40,6 +42,7 @@
 @property (nonatomic,assign) bool serverStarted;
 @property (nonatomic, assign) int numChannels;
 @property (nonatomic, assign) NSMutableArray *channelNames;
+@property (nonatomic, assign) NSMutableArray *channelImages;
 //+(CAPlayThroughObjC*)sharedCAPlayThroughObjC;
 +(CAPlayThroughObjC*)sharedCAPlayThroughObjC:(CAPlayThroughObjC*) Playthrough;
 
@@ -48,6 +51,7 @@
 - (AudioBufferList *) decodeAudioBufferList: (NSData *) data;
 
 - (void) refreshConnectedClients;
+- (void)doubleClick:(id)nid;
 
 @property (nonatomic, strong)IBOutlet NSButton *btnStartServer;
 @property (nonatomic, strong)IBOutlet NSButton *btnStartStream;
