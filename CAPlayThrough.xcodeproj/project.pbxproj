@@ -49,6 +49,8 @@
 		C50FB1481A6A9B1700E65DE0 /* Server.h in Headers */ = {isa = PBXBuildFile; fileRef = C50FB1451A6A9B1700E65DE0 /* Server.h */; };
 		C50FB1491A6A9B1700E65DE0 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = C50FB1461A6A9B1700E65DE0 /* Server.m */; };
 		C50FB14A1A6A9B1700E65DE0 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = C50FB1461A6A9B1700E65DE0 /* Server.m */; };
+		E76D0C9D1A870D4600F8FDAB /* BonjourServer.h in Headers */ = {isa = PBXBuildFile; fileRef = E76D0C9B1A870D4600F8FDAB /* BonjourServer.h */; };
+		E76D0C9E1A870D4600F8FDAB /* BonjourServer.m in Sources */ = {isa = PBXBuildFile; fileRef = E76D0C9C1A870D4600F8FDAB /* BonjourServer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E7B258861A6A292200CDD0E5 /* CAPlayThroughObjC.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B258851A6A292200CDD0E5 /* CAPlayThroughObjC.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E7B258891A6A29E400CDD0E5 /* CAPlayThroughObjC.h in Headers */ = {isa = PBXBuildFile; fileRef = E7B258881A6A29E400CDD0E5 /* CAPlayThroughObjC.h */; };
 		E7B2588A1A6A29E400CDD0E5 /* CAPlayThroughObjC.h in Headers */ = {isa = PBXBuildFile; fileRef = E7B258881A6A29E400CDD0E5 /* CAPlayThroughObjC.h */; };
@@ -92,6 +94,8 @@
 		C50FB1401A6A9B0A00E65DE0 /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
 		C50FB1451A6A9B1700E65DE0 /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
 		C50FB1461A6A9B1700E65DE0 /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
+		E76D0C9B1A870D4600F8FDAB /* BonjourServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BonjourServer.h; sourceTree = "<group>"; };
+		E76D0C9C1A870D4600F8FDAB /* BonjourServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BonjourServer.m; sourceTree = "<group>"; };
 		E7B258851A6A292200CDD0E5 /* CAPlayThroughObjC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CAPlayThroughObjC.mm; sourceTree = "<group>"; };
 		E7B258871A6A293800CDD0E5 /* CAPlayThroughObjCinterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CAPlayThroughObjCinterface.h; sourceTree = "<group>"; };
 		E7B258881A6A29E400CDD0E5 /* CAPlayThroughObjC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAPlayThroughObjC.h; sourceTree = "<group>"; };
@@ -126,6 +130,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				E76D0C9F1A870D4B00F8FDAB /* Bonjour */,
 				C50FB13F1A6A9B0A00E65DE0 /* GCDAsyncUdpSocket.h */,
 				C50FB1401A6A9B0A00E65DE0 /* GCDAsyncUdpSocket.m */,
 				E7B258871A6A293800CDD0E5 /* CAPlayThroughObjCinterface.h */,
@@ -231,6 +236,15 @@
 			path = PublicUtility;
 			sourceTree = "<group>";
 		};
+		E76D0C9F1A870D4B00F8FDAB /* Bonjour */ = {
+			isa = PBXGroup;
+			children = (
+				E76D0C9B1A870D4600F8FDAB /* BonjourServer.h */,
+				E76D0C9C1A870D4600F8FDAB /* BonjourServer.m */,
+			);
+			name = Bonjour;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -254,6 +268,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7B2588B1A6A2D1900CDD0E5 /* CAPlayThroughObjCinterface.h in Headers */,
+				E76D0C9D1A870D4600F8FDAB /* BonjourServer.h in Headers */,
 				8B9E54A30687B3BC00738FA5 /* AudioDeviceList.h in Headers */,
 				8B9E54B30687B59800738FA5 /* CAPlayThroughController.h in Headers */,
 				C50FB1411A6A9B0A00E65DE0 /* GCDAsyncUdpSocket.h in Headers */,
@@ -379,6 +394,7 @@
 				8B9E54A20687B3BC00738FA5 /* AudioDeviceList.cpp in Sources */,
 				8B9E54B40687B59800738FA5 /* CAPlayThroughController.mm in Sources */,
 				C50FB1491A6A9B1700E65DE0 /* Server.m in Sources */,
+				E76D0C9E1A870D4600F8FDAB /* BonjourServer.m in Sources */,
 				8B9E54D00687B6EB00738FA5 /* CAPlayThrough.mm in Sources */,
 				8B9E54DE0687B72500738FA5 /* AudioDevice.cpp in Sources */,
 				2B658F0A17E7E0FD00E2ADDE /* CARingBuffer.cpp in Sources */,
