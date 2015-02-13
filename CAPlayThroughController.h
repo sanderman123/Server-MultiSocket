@@ -48,8 +48,9 @@
 #import <Cocoa/Cocoa.h>
 #include "CAPlayThrough.h"
 #include "AudioDeviceList.h"
+#import <BonjourServer.h>
 
-@interface CAPlayThroughController : NSObject
+@interface CAPlayThroughController : NSObject <ServerDelegate>
 {
 	IBOutlet NSPopUpButton *		mInputDevices;
 	IBOutlet NSPopUpButton *		mOutputDevices;
@@ -63,6 +64,8 @@
 	AudioDeviceID					inputDevice;
 	AudioDeviceID					outputDevice;
     IBOutlet CAPlayThroughObjC *playthrough;
+    
+    BonjourServer *Bonjourserver;
 }
 
 - (IBAction)startStop:(id)sender;
