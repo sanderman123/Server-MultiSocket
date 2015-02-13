@@ -12,6 +12,7 @@
 @implementation CAPlayThroughObjC
 static CAPlayThroughObjC* _sharedCAPlayThroughObjC = nil;
 @synthesize server;
+@synthesize tcpServer;
 @synthesize serverStarted;
 @synthesize streaming;
 @synthesize btnStartStream;
@@ -65,6 +66,7 @@ void* initializeInstance(void *THIS){
         byteData2 = (Byte*) malloc(1024);
         streaming = false;
         server = [[[Server alloc] init] retain];
+        tcpServer = [[TCPServer alloc] init];
         
 //        NSURL *furl = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:@"black.jpeg"]];
         NSString *path = [[NSBundle mainBundle] pathForResource:@"music-note" ofType:@"png"];
@@ -108,7 +110,12 @@ void* initializeInstance(void *THIS){
             [mutableData appendBytes:frame length:ab.mDataByteSize];
         }
         
-        [server sendToAll:mutableData];
+//        [server sendToAll:mutableData];
+//        tcpServer.audioDataFlag = 1;
+//        [dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) addope]
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            [tcpServer sendToAll:mutableData];
+        });
         // return mutableData;
     } else if (serverStarted && !initializedChannels){
         initializedChannels = true;
@@ -186,6 +193,7 @@ void* initializeInstance(void *THIS){
 -(void)btnStartServerClicked:(id)sender{
     serverStarted = true;
     [server createServerOnPort:[tfPort intValue]];
+    [tcpServer startServerOnPort:[tfPort intValue]];
     
 //    NSLog(@"Numchannels: %i", _numChannels);
 //    channelNames = [[NSMutableArray alloc] init];
@@ -335,6 +343,8 @@ void* initializeInstance(void *THIS){
     [channelNames replaceObjectAtIndex:(NSUInteger)selectedRow withObject:string];
     //inform clients of new channel name
     [server sendUpdateToClients];
+//    tcpServer.audioDataFlag = 0;
+//    [tcpServer sendUpdateToClients];
 }
 
 -(void)refreshConnectedClients{
@@ -373,6 +383,8 @@ void* initializeInstance(void *THIS){
                 [channelImages replaceObjectAtIndex:rowNumber withObject:image];
 //                [server sendChannelImageToClients:image index:rowNumber];
                 [server sendChannelImageToClients:fileName format:fileExtension index:rowNumber];
+//                tcpServer.audioDataFlag = 0;
+//                [tcpServer sendChannelImageToClients:fileName format:fileExtension index:rowNumber];
                 [channelsTableView reloadData];
             }
         }

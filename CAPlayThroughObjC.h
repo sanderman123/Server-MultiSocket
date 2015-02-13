@@ -14,6 +14,7 @@
 
 #import "GCDAsyncUdpSocket.h"
 #import "Server.h"
+#import "TCPServer.h"
 
 // An Objective-C class that needs to be accessed from C++
 @interface CAPlayThroughObjC : NSView<NSTableViewDataSource,NSTableViewDelegate>
@@ -38,6 +39,7 @@
 }
 
 @property (nonatomic,strong) Server* server;
+@property (nonatomic,strong) TCPServer* tcpServer;
 @property (nonatomic,assign) bool streaming;
 @property (nonatomic,assign) bool serverStarted;
 @property (nonatomic, assign) int numChannels;

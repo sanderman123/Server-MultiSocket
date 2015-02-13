@@ -49,6 +49,11 @@
 		C50FB1481A6A9B1700E65DE0 /* Server.h in Headers */ = {isa = PBXBuildFile; fileRef = C50FB1451A6A9B1700E65DE0 /* Server.h */; };
 		C50FB1491A6A9B1700E65DE0 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = C50FB1461A6A9B1700E65DE0 /* Server.m */; };
 		C50FB14A1A6A9B1700E65DE0 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = C50FB1461A6A9B1700E65DE0 /* Server.m */; };
+		C5592F501A886064003E3552 /* TCPServer.h in Headers */ = {isa = PBXBuildFile; fileRef = C5592F4E1A886064003E3552 /* TCPServer.h */; };
+		C5592F511A886064003E3552 /* TCPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = C5592F4F1A886064003E3552 /* TCPServer.m */; };
+		C5592F541A886081003E3552 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = C5592F521A886081003E3552 /* GCDAsyncSocket.h */; };
+		C5592F551A886081003E3552 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = C5592F531A886081003E3552 /* GCDAsyncSocket.m */; };
+		C5592F5A1A886C90003E3552 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5592F591A886C90003E3552 /* Security.framework */; };
 		C577896E1A80D44800E36B5A /* music-note.png in Resources */ = {isa = PBXBuildFile; fileRef = C577896D1A80D44800E36B5A /* music-note.png */; };
 		C57789701A80D6B400E36B5A /* black.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = C577896F1A80D6B400E36B5A /* black.jpeg */; };
 		E7B258861A6A292200CDD0E5 /* CAPlayThroughObjC.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B258851A6A292200CDD0E5 /* CAPlayThroughObjC.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -94,6 +99,11 @@
 		C50FB1401A6A9B0A00E65DE0 /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
 		C50FB1451A6A9B1700E65DE0 /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
 		C50FB1461A6A9B1700E65DE0 /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
+		C5592F4E1A886064003E3552 /* TCPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCPServer.h; sourceTree = "<group>"; };
+		C5592F4F1A886064003E3552 /* TCPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCPServer.m; sourceTree = "<group>"; };
+		C5592F521A886081003E3552 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
+		C5592F531A886081003E3552 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
+		C5592F591A886C90003E3552 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		C577896D1A80D44800E36B5A /* music-note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "music-note.png"; sourceTree = "<group>"; };
 		C577896F1A80D6B400E36B5A /* black.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = black.jpeg; sourceTree = "<group>"; };
 		E7B258851A6A292200CDD0E5 /* CAPlayThroughObjC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CAPlayThroughObjC.mm; sourceTree = "<group>"; };
@@ -117,6 +127,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5592F5A1A886C90003E3552 /* Security.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				8B9E523A0687AE9C00738FA5 /* AudioToolbox.framework in Frameworks */,
 				8B9E523B0687AE9C00738FA5 /* AudioUnit.framework in Frameworks */,
@@ -130,6 +141,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C5592F521A886081003E3552 /* GCDAsyncSocket.h */,
+				C5592F531A886081003E3552 /* GCDAsyncSocket.m */,
 				C50FB13F1A6A9B0A00E65DE0 /* GCDAsyncUdpSocket.h */,
 				C50FB1401A6A9B0A00E65DE0 /* GCDAsyncUdpSocket.m */,
 				E7B258871A6A293800CDD0E5 /* CAPlayThroughObjCinterface.h */,
@@ -144,6 +157,8 @@
 				8B9E54A00687B3BC00738FA5 /* AudioDeviceList.cpp */,
 				8B9E54A10687B3BC00738FA5 /* AudioDeviceList.h */,
 				C50FB1451A6A9B1700E65DE0 /* Server.h */,
+				C5592F4E1A886064003E3552 /* TCPServer.h */,
+				C5592F4F1A886064003E3552 /* TCPServer.m */,
 				C50FB1461A6A9B1700E65DE0 /* Server.m */,
 			);
 			name = Classes;
@@ -215,6 +230,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C5592F591A886C90003E3552 /* Security.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
@@ -260,6 +276,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7B2588B1A6A2D1900CDD0E5 /* CAPlayThroughObjCinterface.h in Headers */,
+				C5592F541A886081003E3552 /* GCDAsyncSocket.h in Headers */,
+				C5592F501A886064003E3552 /* TCPServer.h in Headers */,
 				8B9E54A30687B3BC00738FA5 /* AudioDeviceList.h in Headers */,
 				8B9E54B30687B59800738FA5 /* CAPlayThroughController.h in Headers */,
 				C50FB1411A6A9B0A00E65DE0 /* GCDAsyncUdpSocket.h in Headers */,
@@ -382,7 +400,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5592F551A886081003E3552 /* GCDAsyncSocket.m in Sources */,
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				C5592F511A886064003E3552 /* TCPServer.m in Sources */,
 				C50FB1431A6A9B0A00E65DE0 /* GCDAsyncUdpSocket.m in Sources */,
 				8B9E54A20687B3BC00738FA5 /* AudioDeviceList.cpp in Sources */,
 				8B9E54B40687B59800738FA5 /* CAPlayThroughController.mm in Sources */,

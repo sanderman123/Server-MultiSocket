@@ -75,6 +75,7 @@
 -(void)sendUpdateToClients{
     NSData* data = [self getChannelNamesAsData];
     [self sendToAll:data];
+    NSLog(@"Update sent");
 }
 
 -(void)sendChannelImageToClients:(NSString*)name format:(NSString*) format index:(int)index{
@@ -106,6 +107,10 @@
 
 - (NSMutableArray*)getClientNames{
     return clientNames;
+}
+
+-(void)udpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error {
+    NSLog(@"Did not send tag: %li, Error: %@", tag, error.localizedDescription);
 }
 
 
