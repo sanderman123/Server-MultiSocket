@@ -77,7 +77,7 @@
     [self sendToAll:data];
     NSLog(@"Update sent");
 }
-
+//won't used anymore
 -(void)sendChannelImageToClients:(NSString*)name format:(NSString*) format index:(int)index{
     //NSArray *images = [CAPlayThroughObjC sharedCAPlayThroughObjC:nil].channelImages;
    // NSImage *image = [images objectAtIndex:index];

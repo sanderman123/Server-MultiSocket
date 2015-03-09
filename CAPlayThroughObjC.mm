@@ -129,7 +129,8 @@ void* initializeInstance(void *THIS){
         for(int i = 0; i < _numChannels;i++){
             NSDictionary *dict = [[NSDictionary alloc]init];
             [dict setValue:[NSString stringWithFormat:@"Channel %i",i+1] forKey:@"name"];
-            [dict setValue:defaultImage forKey:@"image"];
+            NSDictionary *imgDict = [[NSDictionary alloc]initWithObjectsAndKeys:@"music-note",@"fileName",@"png",@"fileExtension", nil];
+            [dict setValue:imgDict forKey:@"image"];
             [channelsInfo addObject:dict];
         }
     }
@@ -337,7 +338,7 @@ void* initializeInstance(void *THIS){
         } else {
             if((int)[channelsInfo count] == _numChannels){
                 NSImageView *image = [[NSImageView alloc] initWithFrame:NSMakeRect(0, 0, 20, 20)];
-                [image setImage:[[channelsInfo objectAtIndex:row] objectForKey:@"image"]];
+                [image setImage:[NSImage imageNamed:[NSString stringWithFormat:@"%@.%@",[[[channelsInfo objectAtIndex:row] objectForKey:@"image"] objectForKey:@"fileName"],[[[channelsInfo objectAtIndex:row] objectForKey:@"image"] objectForKey:@"fileExtension"]]]];
                 return image;
             }
         }
@@ -395,11 +396,14 @@ void* initializeInstance(void *THIS){
                     //image = [[NSImage alloc] initWithContentsOfURL:url];
                 }
                 
-                [[channelsInfo objectAtIndex:rowNumber] setObject:image forKey:@"image"];
+                NSDictionary *dict = [[NSDictionary alloc]initWithObjectsAndKeys:fileName,@"fileName",fileExtension,@"fileExtension", nil];
+                
+                
+                [[channelsInfo objectAtIndex:rowNumber] setObject:dict forKey:@"image"];
                 
 //                [channelImages replaceObjectAtIndex:rowNumber withObject:image];
 //                [server sendChannelImageToClients:image index:rowNumber];
-                [udpServer sendChannelImageToClients:fileName format:fileExtension index:rowNumber];
+                [udpServer sendUpdateToClients];
 //                tcpServer.audioDataFlag = 0;
 //                [tcpServer sendChannelImageToClients:fileName format:fileExtension index:rowNumber];
                 [channelsTableView reloadData];
