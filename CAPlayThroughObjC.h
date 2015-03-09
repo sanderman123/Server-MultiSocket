@@ -36,9 +36,11 @@
 
     bool initializedChannels;
     int selectedRow;
+    
+    bool udp;
 }
 
-@property (nonatomic,strong) Server* server;
+@property (nonatomic,strong) Server* udpServer;
 @property (nonatomic,strong) TCPServer* tcpServer;
 @property (nonatomic,assign) bool streaming;
 @property (nonatomic,assign) bool serverStarted;

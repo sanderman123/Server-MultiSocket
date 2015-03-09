@@ -11,7 +11,7 @@
 
 @implementation CAPlayThroughObjC
 static CAPlayThroughObjC* _sharedCAPlayThroughObjC = nil;
-@synthesize server;
+@synthesize udpServer;
 @synthesize tcpServer;
 @synthesize serverStarted;
 @synthesize streaming;
@@ -64,9 +64,6 @@ void* initializeInstance(void *THIS){
         abl = (AudioBufferList*) malloc(sizeof(AudioBufferList));
         byteData = (Byte*) malloc(1024); //should maybe be a different value in the future
         byteData2 = (Byte*) malloc(1024);
-        streaming = false;
-        server = [[[Server alloc] init] retain];
-        tcpServer = [[TCPServer alloc] init];
         
 //        NSURL *furl = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:@"black.jpeg"]];
         NSString *path = [[NSBundle mainBundle] pathForResource:@"music-note" ofType:@"png"];
@@ -110,12 +107,17 @@ void* initializeInstance(void *THIS){
             [mutableData appendBytes:frame length:ab.mDataByteSize];
         }
         
-//        [server sendToAll:mutableData];
+        if (udp) {
+            [udpServer sendToAll:mutableData];
+        } else {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                [tcpServer sendToAll:mutableData];
+            });
+        }
+        
+//        [udpServer sendToAll:mutableData];
 //        tcpServer.audioDataFlag = 1;
 //        [dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) addope]
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-            [tcpServer sendToAll:mutableData];
-        });
         // return mutableData;
     } else if (serverStarted && !initializedChannels){
         initializedChannels = true;
@@ -192,8 +194,17 @@ void* initializeInstance(void *THIS){
 
 -(void)btnStartServerClicked:(id)sender{
     serverStarted = true;
-    [server createServerOnPort:[tfPort intValue]];
-    [tcpServer startServerOnPort:[tfPort intValue]];
+    udp = false;
+    streaming = false;
+    udpServer = [[[Server alloc] init] retain];
+    [udpServer createServerOnPort:[tfPort intValue]];
+    
+    if (udp) {
+
+    } else {
+        tcpServer = [[TCPServer alloc] init];
+        [tcpServer startServerOnPort:[tfPort intValue]];
+    }
     
 //    NSLog(@"Numchannels: %i", _numChannels);
 //    channelNames = [[NSMutableArray alloc] init];
@@ -270,7 +281,7 @@ void* initializeInstance(void *THIS){
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
     if(tableView.tag == 0){
-        NSMutableArray *names = [server getClientNames];
+        NSMutableArray *names = [udpServer getClientNames];
         NSLog(@"%lu",(unsigned long)[names count]);
         return [names count];
     } else {
@@ -314,7 +325,7 @@ void* initializeInstance(void *THIS){
         result.bordered = false;
     }
     if(tableView.tag == 0){
-        NSMutableArray *names = [server getClientNames];
+        NSMutableArray *names = [udpServer getClientNames];
         result.stringValue = [names objectAtIndex:row];
         
         // Return the result
@@ -342,7 +353,7 @@ void* initializeInstance(void *THIS){
     NSString *string = [[[obj object] selectedCell] stringValue];
     [channelNames replaceObjectAtIndex:(NSUInteger)selectedRow withObject:string];
     //inform clients of new channel name
-    [server sendUpdateToClients];
+    [udpServer sendUpdateToClients];
 //    tcpServer.audioDataFlag = 0;
 //    [tcpServer sendUpdateToClients];
 }
@@ -382,7 +393,7 @@ void* initializeInstance(void *THIS){
                 }
                 [channelImages replaceObjectAtIndex:rowNumber withObject:image];
 //                [server sendChannelImageToClients:image index:rowNumber];
-                [server sendChannelImageToClients:fileName format:fileExtension index:rowNumber];
+                [udpServer sendChannelImageToClients:fileName format:fileExtension index:rowNumber];
 //                tcpServer.audioDataFlag = 0;
 //                [tcpServer sendChannelImageToClients:fileName format:fileExtension index:rowNumber];
                 [channelsTableView reloadData];
