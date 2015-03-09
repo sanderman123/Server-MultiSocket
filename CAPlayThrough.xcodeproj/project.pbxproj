@@ -162,9 +162,9 @@
 				8B9E54DD0687B72500738FA5 /* AudioDevice.h */,
 				8B9E54A00687B3BC00738FA5 /* AudioDeviceList.cpp */,
 				8B9E54A10687B3BC00738FA5 /* AudioDeviceList.h */,
-				C50FB1451A6A9B1700E65DE0 /* Server.h */,
 				C5592F4E1A886064003E3552 /* TCPServer.h */,
 				C5592F4F1A886064003E3552 /* TCPServer.m */,
+				C50FB1451A6A9B1700E65DE0 /* Server.h */,
 				C50FB1461A6A9B1700E65DE0 /* Server.m */,
 			);
 			name = Classes;

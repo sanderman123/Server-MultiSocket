@@ -18,8 +18,7 @@ static CAPlayThroughObjC* _sharedCAPlayThroughObjC = nil;
 @synthesize btnStartStream;
 @synthesize btnStartServer;
 @synthesize tfPort;
-@synthesize channelNames;
-@synthesize channelImages;
+@synthesize channelsInfo;
 
 static int TextFieldContext = 0;
 
@@ -124,13 +123,14 @@ void* initializeInstance(void *THIS){
         
         _numChannels = ablist->mNumberBuffers;
         [_labelChannels setStringValue:[NSString stringWithFormat:@"%@ %i",_labelChannels.stringValue, _numChannels]];
-        channelNames = [[NSMutableArray alloc] init];
-        channelImages = [[NSMutableArray alloc] init];
+        
+        channelsInfo = [[NSMutableArray alloc]init];
         NSLog(@"Numchannels %i", _numChannels);
         for(int i = 0; i < _numChannels;i++){
-            [channelNames addObject:[NSString stringWithFormat:@"Channel %i",i+1]];
-            [channelImages addObject:defaultImage];
-            
+            NSDictionary *dict = [[NSDictionary alloc]init];
+            [dict setValue:[NSString stringWithFormat:@"Channel %i",i+1] forKey:@"name"];
+            [dict setValue:defaultImage forKey:@"image"];
+            [channelsInfo addObject:dict];
         }
     }
 }
@@ -333,11 +333,11 @@ void* initializeInstance(void *THIS){
         if(tableView.tableColumns[0] == tableColumn){
             result.stringValue = [NSString stringWithFormat:@"%li",row + 1];
         } else if(tableView.tableColumns[1] == tableColumn){
-            result.stringValue = [channelNames objectAtIndex:row];
+            result.stringValue = [[channelsInfo objectAtIndex:row] objectForKey:@"name"];
         } else {
-            if((int)channelImages.count == _numChannels){
+            if((int)[channelsInfo count] == _numChannels){
                 NSImageView *image = [[NSImageView alloc] initWithFrame:NSMakeRect(0, 0, 20, 20)];
-                [image setImage:[channelImages objectAtIndex:row]];
+                [image setImage:[[channelsInfo objectAtIndex:row] objectForKey:@"image"]];
                 return image;
             }
         }
@@ -351,7 +351,10 @@ void* initializeInstance(void *THIS){
 
 -(void)controlTextDidEndEditing:(NSNotification *)obj{
     NSString *string = [[[obj object] selectedCell] stringValue];
-    [channelNames replaceObjectAtIndex:(NSUInteger)selectedRow withObject:string];
+    
+    [[channelsInfo objectAtIndex:(NSUInteger)selectedRow] setObject:string forKey:@"name"];
+    
+//    [channelNames replaceObjectAtIndex:(NSUInteger)selectedRow withObject:string];
     //inform clients of new channel name
     [udpServer sendUpdateToClients];
 //    tcpServer.audioDataFlag = 0;
@@ -391,7 +394,10 @@ void* initializeInstance(void *THIS){
                     // do something with the url here.
                     //image = [[NSImage alloc] initWithContentsOfURL:url];
                 }
-                [channelImages replaceObjectAtIndex:rowNumber withObject:image];
+                
+                [[channelsInfo objectAtIndex:rowNumber] setObject:image forKey:@"image"];
+                
+//                [channelImages replaceObjectAtIndex:rowNumber withObject:image];
 //                [server sendChannelImageToClients:image index:rowNumber];
                 [udpServer sendChannelImageToClients:fileName format:fileExtension index:rowNumber];
 //                tcpServer.audioDataFlag = 0;

@@ -92,9 +92,9 @@
 }
 
 -(NSData *)getChannelNamesAsData{
-    NSArray *cnames = [CAPlayThroughObjC sharedCAPlayThroughObjC:nil].channelNames;
+    NSArray *cnames = [CAPlayThroughObjC sharedCAPlayThroughObjC:nil].channelsInfo;
     NSMutableDictionary *postDict = [[NSMutableDictionary alloc]init];
-    [postDict setValue:cnames forKey:@"channelNames"];
+    [postDict setValue:cnames forKey:@"channels"];
     [postDict setValue:[NSString stringWithFormat:@"udp"] forKey:@"audio"];
     [postDict setValue:[NSString stringWithFormat:@"udp"] forKey:@"update"];
 //    

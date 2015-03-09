@@ -45,8 +45,7 @@
 @property (nonatomic,assign) bool streaming;
 @property (nonatomic,assign) bool serverStarted;
 @property (nonatomic, assign) int numChannels;
-@property (nonatomic, assign) NSMutableArray *channelNames;
-@property (nonatomic, assign) NSMutableArray *channelImages;
+@property (nonatomic, assign) NSMutableArray *channelsInfo;
 //+(CAPlayThroughObjC*)sharedCAPlayThroughObjC;
 +(CAPlayThroughObjC*)sharedCAPlayThroughObjC:(CAPlayThroughObjC*) Playthrough;
 

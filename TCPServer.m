@@ -87,16 +87,15 @@
 }
 
 -(NSData *)getChannelNamesAsData{
-    NSArray *cnames = [CAPlayThroughObjC sharedCAPlayThroughObjC:nil].channelNames;
-    NSString *str = @"";
+    NSArray *cnames = [CAPlayThroughObjC sharedCAPlayThroughObjC:nil].channelsInfo;
     
-    for(int i = 0; i < (int)cnames.count; i++){
-        if(i > 0){
-            str = [str stringByAppendingString:@":"];
-        }
-        str = [str stringByAppendingString:[NSString stringWithFormat:@"%@",[cnames objectAtIndex:i]]];
-    }
-    NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
+    NSMutableDictionary *postDict = [[NSMutableDictionary alloc]init];
+    [postDict setValue:cnames forKey:@"channels"];
+    [postDict setValue:[NSString stringWithFormat:@"udp"] forKey:@"audio"];
+    [postDict setValue:[NSString stringWithFormat:@"udp"] forKey:@"update"];
+    NSData *data = [NSJSONSerialization dataWithJSONObject:postDict options:0 error:nil];
+    
+    //    [str dataUsingEncoding:NSUTF8StringEncoding];
     return data;
 }
 
