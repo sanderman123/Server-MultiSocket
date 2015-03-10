@@ -727,7 +727,7 @@ OSStatus CAPlayThrough::InputProc(void *inRefCon,
     //    tmp.init;
     //This->mInputBuffer = TransferAudioBuffer(This->tmp, This->mInputBuffer);
     //if (This->isAlreadyCreated== false) {
-    printf("Transferring Audio Buffer...");
+//    printf("Transferring Audio Buffer...");
     TransferAudioBuffer(This->tmp, This->mInputBuffer);
     
     checkErr(err);

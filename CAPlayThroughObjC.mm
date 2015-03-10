@@ -31,7 +31,7 @@ void TransferAudioBuffer (void *THIS,  AudioBufferList *list)
     //    }
     //    @autoreleasepool {
     
-    [(/*__bridge */id) THIS encodeAudioBufferList:list];
+    [(__bridge /*__bridge */id) THIS encodeAudioBufferList:list];
     
     
     //    list = [(id) self decodeAudioBufferList:tmp];
@@ -40,8 +40,9 @@ void TransferAudioBuffer (void *THIS,  AudioBufferList *list)
     
 }
 void* initializeInstance(void *THIS){
-    THIS = [CAPlayThroughObjC sharedCAPlayThroughObjC:nil];//[[CAPlayThroughObjC alloc]init];
-    [(/*__bridge */id)THIS initVariables];
+//    THIS = [CAPlayThroughObjC sharedCAPlayThroughObjC:nil];//[[CAPlayThroughObjC alloc]init];
+    THIS = (__bridge void*)[CAPlayThroughObjC sharedCAPlayThroughObjC:nil];//[[CAPlayThroughObjC alloc]init];
+    [(__bridge /*__bridge */id)THIS initVariables];
     return THIS;
 }
 +(CAPlayThroughObjC*)sharedCAPlayThroughObjC:(CAPlayThroughObjC*) Playthrough
@@ -126,14 +127,72 @@ void* initializeInstance(void *THIS){
         
         channelsInfo = [[NSMutableArray alloc]init];
         NSLog(@"Numchannels %i", _numChannels);
-        for(int i = 0; i < _numChannels;i++){
-            NSDictionary *dict = [[NSDictionary alloc]init];
-            [dict setValue:[NSString stringWithFormat:@"Channel %i",i+1] forKey:@"name"];
-            NSDictionary *imgDict = [[NSDictionary alloc]initWithObjectsAndKeys:@"music-note",@"fileName",@"png",@"fileExtension", nil];
-            [dict setValue:imgDict forKey:@"image"];
-            [channelsInfo addObject:dict];
+        
+        for(int i = 0 ; i < 2 ;i++)
+        {
+            NSLog(@"123");
         }
+        
+        //NSDictionary *dict = [[NSDictionary alloc]init];
+        for(int i = 0; i < 2;i++){
+          //  [dict setValue:[NSString stringWithFormat:@"Channel %i",i+1] forKey:@"name"];
+//            [dict setValue:@"123" forKey:@"name"];
+//            [dict initWithObjectsAndKeys:[NSString stringWithFormat:@"Channel %i",i+1] ?: [NSNull null], @"name", nil];
+            NSDictionary *dict = [[NSDictionary alloc]initWithObjectsAndKeys:[NSString stringWithFormat:@"Channel %i",i+1],@"name", nil];//[NSDictionary dictionaryWithObject:@"Cannel X" forKey:@"name"];
+//            dict = @{ @"name" :[NSString stringWithFormat:@"Channel %i",i+1]};
+            [channelsInfo addObject:dict];
+            //[dict autorelease];
+        }
+        
+        [_sharedCAPlayThroughObjC initTables];
     }
+}
+
+-(void)initTables
+{
+    clientsTableContainer = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 0, 148, 200)];
+    clientsTableView = [[NSTableView alloc]initWithFrame:NSMakeRect(0, 0, 148, 200)];
+    
+    [clientsTableView setDataSource:self];
+    [clientsTableView setDelegate:self];
+    
+    NSTableColumn * column1 = [[NSTableColumn alloc] initWithIdentifier:@"www"];
+    [[column1 headerCell] setStringValue:@"Connected Clients"];
+    [column1 setWidth:148];
+    [clientsTableView addTableColumn:column1];
+    //    [tableview reloadData];
+    
+    [clientsTableContainer setDocumentView:clientsTableView];
+    [clientsTableContainer setHasVerticalScroller:YES];
+    [_sharedCAPlayThroughObjC addSubview:clientsTableContainer];
+    clientsTableView.tag = 0;
+    
+    channelsTableContainer = [[NSScrollView alloc] initWithFrame:NSMakeRect(200, 0, 230, 200)];
+    channelsTableView = [[NSTableView alloc]initWithFrame:NSMakeRect(0, 0, 230, 200)];
+    
+    [channelsTableView setDataSource:self];
+    [channelsTableView setDelegate:self];
+    
+    NSTableColumn * columnIndex = [[NSTableColumn alloc] initWithIdentifier:@"index"];
+    NSTableColumn * columnName = [[NSTableColumn alloc] initWithIdentifier:@"name"];
+    NSTableColumn * columnImage = [[NSTableColumn alloc] initWithIdentifier:@"image"];
+    [[columnIndex headerCell] setStringValue:@"No"];
+    [[columnName headerCell] setStringValue:@"Name"];
+    [[columnImage headerCell] setStringValue:@"Img"];
+    [columnIndex setWidth:20];
+    [columnName setWidth:160];
+    [columnImage setWidth:20];
+    [channelsTableView addTableColumn:columnIndex];
+    [channelsTableView addTableColumn:columnName];
+    [channelsTableView addTableColumn:columnImage];
+    
+    [channelsTableContainer setDocumentView:channelsTableView];
+    [channelsTableContainer setHasVerticalScroller:YES];
+    [_sharedCAPlayThroughObjC addSubview:channelsTableContainer];
+    
+    [channelsTableView setDoubleAction:@selector(doubleClick:)];
+    channelsTableView.tag = 1;
+    [channelsTableView reloadData];
 }
 
 - (AudioBufferList *)decodeAudioBufferList:(NSData *)data {
@@ -197,7 +256,7 @@ void* initializeInstance(void *THIS){
     serverStarted = true;
     udp = false;
     streaming = false;
-    udpServer = [[[Server alloc] init] retain];
+    udpServer = [[Server alloc] init];
     [udpServer createServerOnPort:[tfPort intValue]];
     
     if (udp) {
@@ -212,50 +271,7 @@ void* initializeInstance(void *THIS){
 //    for(int i = 0; i < _numChannels;i++){
 //        [channelNames addObject:[NSString stringWithFormat:@"Channel %i",i]];
 //    }
-    
-    clientsTableContainer = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 0, 148, 200)];
-    clientsTableView = [[NSTableView alloc]initWithFrame:NSMakeRect(0, 0, 148, 200)];
-    
-    [clientsTableView setDataSource:self];
-    [clientsTableView setDelegate:self];
-    
-    NSTableColumn * column1 = [[NSTableColumn alloc] initWithIdentifier:@"www"];
-    [[column1 headerCell] setStringValue:@"Connected Clients"];
-    [column1 setWidth:148];
-    [clientsTableView addTableColumn:column1];
-    //    [tableview reloadData];
-    
-    [clientsTableContainer setDocumentView:clientsTableView];
-    [clientsTableContainer setHasVerticalScroller:YES];
-    [_sharedCAPlayThroughObjC addSubview:clientsTableContainer];
-    clientsTableView.tag = 0;
-    
-    channelsTableContainer = [[NSScrollView alloc] initWithFrame:NSMakeRect(200, 0, 230, 200)];
-    channelsTableView = [[NSTableView alloc]initWithFrame:NSMakeRect(0, 0, 230, 200)];
-    
-    [channelsTableView setDataSource:self];
-    [channelsTableView setDelegate:self];
-    
-    NSTableColumn * columnIndex = [[NSTableColumn alloc] initWithIdentifier:@"index"];
-    NSTableColumn * columnName = [[NSTableColumn alloc] initWithIdentifier:@"name"];
-    NSTableColumn * columnImage = [[NSTableColumn alloc] initWithIdentifier:@"image"];
-    [[columnIndex headerCell] setStringValue:@"No"];
-    [[columnName headerCell] setStringValue:@"Name"];
-    [[columnImage headerCell] setStringValue:@"Img"];
-    [columnIndex setWidth:20];
-    [columnName setWidth:160];
-    [columnImage setWidth:20];
-    [channelsTableView addTableColumn:columnIndex];
-    [channelsTableView addTableColumn:columnName];
-    [channelsTableView addTableColumn:columnImage];
-    
-    [channelsTableContainer setDocumentView:channelsTableView];
-    [channelsTableContainer setHasVerticalScroller:YES];
-    [_sharedCAPlayThroughObjC addSubview:channelsTableContainer];
-    
-    [channelsTableView setDoubleAction:@selector(doubleClick:)];
-    channelsTableView.tag = 1;
-    [channelsTableView reloadData];
+
 }
 
 -(void)btnStartStreamClicked:(id)sender{
@@ -319,7 +335,7 @@ void* initializeInstance(void *THIS){
 }
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    NSTextField *result = [[tableView makeViewWithIdentifier:@"MainCell" owner:self] autorelease];
+    NSTextField *result = [tableView makeViewWithIdentifier:@"MainCell" owner:self] ;
     if (result == nil) {
         result = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 148, 10)];
         result.identifier = @"MainCell";
@@ -386,7 +402,7 @@ void* initializeInstance(void *THIS){
             NSString *fileExtension = [[NSString alloc] init];
             
             if (clicked == NSFileHandlingPanelOKButton) {
-                for (NSURL *url in [panel URLs]) {
+                for (__strong NSURL *url in [panel URLs]) {
                     [image initWithContentsOfURL:url];
                     fileExtension = [url pathExtension];
                     url = [url URLByDeletingPathExtension];
