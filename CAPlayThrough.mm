@@ -736,9 +736,9 @@ OSStatus CAPlayThrough::InputProc(void *inRefCon,
     
 //    This->mInputBuffer =
 		
-	if(!err) {
-		err = This->mBuffer->Store(This->mInputBuffer, Float64(inNumberFrames), SInt64(inTimeStamp->mSampleTime));
-	}	
+//	if(!err) {
+//		err = This->mBuffer->Store(This->mInputBuffer, Float64(inNumberFrames), SInt64(inTimeStamp->mSampleTime));
+//	}	
 
     
 	return err;

@@ -8,6 +8,10 @@
 
 #import "Server.h"
 #import "CAPlayThroughObjC.h"
+
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 @implementation Server
 
 - (void) createServerOnPort: (UInt16) p {
@@ -28,9 +32,10 @@
         NSLog(@"Succesfully started receiving");
     }
     
-    clientAddresses = [[NSMutableArray alloc] init];
+//    clientJoinRequests =[[NSMutableArray alloc] init];
+//    clientAddresses = [[NSMutableArray alloc] init];
     clients = [[NSMutableArray alloc]init];
-    clientNames = [[NSMutableArray alloc]init];
+//    clientNames = [[NSMutableArray alloc]init];
     clientCount = 0;
     tag = 0;
     
@@ -38,30 +43,30 @@
 }
 
 - (void) sendToAll: (NSData *) data {
-    for (int i = 0; i < clientCount; i++){
-        [clients[i] sendData:data toAddress:clientAddresses[i] withTimeout:-1 tag:tag];
+    for (NSDictionary *client in clients) {
+        [[client objectForKey:@"streamSocket"] sendData:data toAddress:[client objectForKey:@"audioAddress"] withTimeout:-1 tag:0];
     }
-    tag++;
 }
 
--(void)addClient:(NSData *)address name:(NSString *) name{
+-(void)addClientWithAddress:(NSData *)address AndInfo:(NSMutableDictionary*) jsonDictionary{
+    //New client
     clientCount++;
-    
-    [clientAddresses addObject: address];
-    [clientNames addObject: name];
-    [[CAPlayThroughObjC sharedCAPlayThroughObjC:nil] refreshConnectedClients];
-    
     //Open a new socket
-    [clients addObject: [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)]];
+    GCDAsyncUdpSocket *streamSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)];
     
     //Open a unique port
     NSError *error = [NSError alloc];
-    UInt16 uniquePort = port + clientCount;
-    if (![[clients lastObject] bindToPort:uniquePort error:&error]) {
-        NSLog(@"Error binding port: %i, %@", uniquePort, error.localizedDescription);
+    if (![streamSocket bindToPort:0 error:&error]) {
+        NSLog(@"Error binding port: %@", error.localizedDescription);
     } else {
-        NSLog(@"Client socket added on port: %i", uniquePort);
+        NSLog(@"Client stream socket added on port: %i", streamSocket.localPort);
     }
+    
+    [jsonDictionary setObject:streamSocket forKey:@"streamSocket"];
+    
+    //New client, remeber the uuid and name
+    [clients addObject:jsonDictionary];
+    [[CAPlayThroughObjC sharedCAPlayThroughObjC:nil] refreshConnectedClients];
     
     [self initializeClient:address];
 }
@@ -74,7 +79,9 @@
 
 -(void)sendUpdateToClients{
     NSData* data = [self getChannelNamesAsData];
-    [self sendToAll:data];
+    for (int i = 0; i < clientCount; i++) {
+        [udpSocket sendData:data toAddress:[[clients objectAtIndex:i] objectForKey:@"updateAddress"] withTimeout:-1 tag:0];
+    }
     NSLog(@"Update sent");
 }
 //won't used anymore
@@ -83,8 +90,9 @@
    // NSImage *image = [images objectAtIndex:index];
     NSString *str = [NSString stringWithFormat:@"image:%i:%@:%@",index,name,format];
     NSData *strData = [str dataUsingEncoding:NSUTF8StringEncoding];
-    [self sendToAll:strData];
-    
+    for (int i = 0; i < clientCount; i++) {
+        [udpSocket sendData:strData toAddress:[[clients objectAtIndex:i] objectForKey:@"updateAddress"] withTimeout:-1 tag:0];
+    }
     
 //    NSData *imageData = [[NSData alloc]initWithData:[image TIFFRepresentation]];
 //    imageData = [image TIFFRepresentation];
@@ -126,20 +134,48 @@
 - (void) udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
     
     NSLog(@"Received data with length: %lu", (unsigned long)data.length);
+    NSError *e = nil;
+    NSMutableDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData: data options: NSJSONReadingMutableContainers error: &e];
     
-    NSString *clientName = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"Data: %@", clientName);
+//    for (NSDictionary *item in jsonDictionary) {
+//        NSLog(@"New item %@", item);
+//    }
     
-    BOOL known = false;
-    for (NSData *c in clientAddresses){
-        if([c isEqualToData:address]){
-            known = true;
-            break;
+    for (int i = 0; i < clientCount; i++) {
+        NSMutableDictionary *client = [clients objectAtIndex:i];
+        if ([[client valueForKey:@"uuid"] isEqualToString: [jsonDictionary valueForKey:@"uuid"]]) {
+            //Register audio streaming and update sockets to the client
+            if ([[jsonDictionary valueForKey:@"socket"] isEqualToString:@"updateSocket"]) {
+                //Register an update socket to the client
+                [client setObject:address forKey:@"updateAddress"];
+            } else if ([[jsonDictionary valueForKey:@"socket"] isEqualToString:@"audioSocket"]) {
+                //Register an audio stream socket to the client
+                [client setObject:address forKey:@"audioAddress"];
+            }
+//            for (NSDictionary *item in client) {
+//                NSLog(@"Updated item %@", item);
+//            }
+            return;
         }
     }
-    if (!known) {
-        [self addClient:address name:clientName];
-    }
+    
+    //New client
+    [self addClientWithAddress:address AndInfo:jsonDictionary];
+    
+    
+    NSString *clientName = [jsonDictionary valueForKey:@"name"];
+    NSLog(@"Client with name: %@, connected", clientName);
+//    
+//    BOOL known = false;
+//    for (NSData *c in clientAddresses){
+//        if([c isEqualToData:address]){
+//            known = true;
+//            break;
+//        }
+//    }
+//    if (!known) {
+//        [self addClient:address name:clientName];
+//    }
 }
 
 @end

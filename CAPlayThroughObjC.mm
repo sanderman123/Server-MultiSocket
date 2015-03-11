@@ -128,17 +128,15 @@ void* initializeInstance(void *THIS){
         channelsInfo = [[NSMutableArray alloc]init];
         NSLog(@"Numchannels %i", _numChannels);
         
-        for(int i = 0 ; i < 2 ;i++)
-        {
-            NSLog(@"123");
-        }
-        
         //NSDictionary *dict = [[NSDictionary alloc]init];
-        for(int i = 0; i < 2;i++){
+        for(int i = 0; i < _numChannels;i++){
           //  [dict setValue:[NSString stringWithFormat:@"Channel %i",i+1] forKey:@"name"];
 //            [dict setValue:@"123" forKey:@"name"];
 //            [dict initWithObjectsAndKeys:[NSString stringWithFormat:@"Channel %i",i+1] ?: [NSNull null], @"name", nil];
-            NSDictionary *dict = [[NSDictionary alloc]initWithObjectsAndKeys:[NSString stringWithFormat:@"Channel %i",i+1],@"name", nil];//[NSDictionary dictionaryWithObject:@"Cannel X" forKey:@"name"];
+            NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[NSString stringWithFormat:@"Channel %i",i+1],@"name", nil];
+            NSDictionary *imgDict = [[NSDictionary alloc] initWithObjectsAndKeys:@"music-note",@"fileName",@"png",@"fileExtension", nil];
+            [dict setObject:imgDict forKey:@"image"];
+            //[NSDictionary        dictionaryWithObject:@"Cannel X" forKey:@"name"];
 //            dict = @{ @"name" :[NSString stringWithFormat:@"Channel %i",i+1]};
             [channelsInfo addObject:dict];
             //[dict autorelease];
@@ -254,7 +252,7 @@ void* initializeInstance(void *THIS){
 
 -(void)btnStartServerClicked:(id)sender{
     serverStarted = true;
-    udp = false;
+    udp = true;
     streaming = false;
     udpServer = [[Server alloc] init];
     [udpServer createServerOnPort:[tfPort intValue]];

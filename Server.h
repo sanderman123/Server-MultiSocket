@@ -18,6 +18,7 @@
     NSMutableArray *clientAddresses;
     NSMutableArray *clients;
     NSMutableArray *clientNames;
+    NSMutableArray *clientJoinRequests;
     int tag;
     int clientCount;
 }
@@ -39,7 +40,7 @@
 
 - (void) udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext;
 
-- (void) addClient: (NSData *) address name: (NSString*) name;
+- (void)addClientWithAddress:(NSData *)address AndInfo:(NSMutableDictionary*) jsonDictionary;
 
 - (NSMutableArray*)getClientNames;
 
