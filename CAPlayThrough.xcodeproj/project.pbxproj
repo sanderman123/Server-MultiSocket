@@ -56,6 +56,13 @@
 		C5592F5A1A886C90003E3552 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5592F591A886C90003E3552 /* Security.framework */; };
 		C577896E1A80D44800E36B5A /* music-note.png in Resources */ = {isa = PBXBuildFile; fileRef = C577896D1A80D44800E36B5A /* music-note.png */; };
 		C57789701A80D6B400E36B5A /* black.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = C577896F1A80D6B400E36B5A /* black.jpeg */; };
+		C59D9A5A1AB7D9C20005180F /* MyAudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = C59D9A581AB7D9C20005180F /* MyAudioPlayer.h */; };
+		C59D9A5B1AB7D9C20005180F /* MyAudioPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = C59D9A591AB7D9C20005180F /* MyAudioPlayer.mm */; };
+		C59D9A751AB7E3020005180F /* libTheAmazingAudioEngine OS X.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C59D9A571AB7D85C0005180F /* libTheAmazingAudioEngine OS X.a */; };
+		C59D9A781AB7E37F0005180F /* TPCircularBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = C59D9A761AB7E37F0005180F /* TPCircularBuffer.c */; };
+		C59D9A791AB7E37F0005180F /* TPCircularBuffer+AudioBufferList.c in Sources */ = {isa = PBXBuildFile; fileRef = C59D9A771AB7E37F0005180F /* TPCircularBuffer+AudioBufferList.c */; };
+		C59D9A7B1AB7E3B80005180F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C59D9A7A1AB7E3B80005180F /* QuartzCore.framework */; };
+		C59D9A7D1AB7E4030005180F /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C59D9A7C1AB7E4030005180F /* Accelerate.framework */; };
 		E732FEDC1A8E6A2500FA4C94 /* BonjourServer.h in Headers */ = {isa = PBXBuildFile; fileRef = E732FEDA1A8E6A2500FA4C94 /* BonjourServer.h */; };
 		E732FEDD1A8E6A2500FA4C94 /* BonjourServer.m in Sources */ = {isa = PBXBuildFile; fileRef = E732FEDB1A8E6A2500FA4C94 /* BonjourServer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E7B258861A6A292200CDD0E5 /* CAPlayThroughObjC.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B258851A6A292200CDD0E5 /* CAPlayThroughObjC.mm */; };
@@ -65,6 +72,30 @@
 		E7B2588C1A6A2D1A00CDD0E5 /* CAPlayThroughObjCinterface.h in Headers */ = {isa = PBXBuildFile; fileRef = E7B258871A6A293800CDD0E5 /* CAPlayThroughObjCinterface.h */; };
 		E7B2588D1A6A2D1E00CDD0E5 /* CAPlayThroughObjC.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B258851A6A292200CDD0E5 /* CAPlayThroughObjC.mm */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C59D9A541AB7D85C0005180F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C59D9A4F1AB7D85B0005180F /* TheAmazingAudioEngine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4C215CEC1523A7D500D36CAD;
+			remoteInfo = "TheAmazingAudioEngine iOS";
+		};
+		C59D9A561AB7D85C0005180F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C59D9A4F1AB7D85B0005180F /* TheAmazingAudioEngine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 685F126518A8A6920014F0C0;
+			remoteInfo = "TheAmazingAudioEngine OS X";
+		};
+		C59D9A731AB7E29A0005180F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C59D9A4F1AB7D85B0005180F /* TheAmazingAudioEngine.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 685F123E18A8A6920014F0C0;
+			remoteInfo = "TheAmazingAudioEngine OS X";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -108,6 +139,13 @@
 		C5592F591A886C90003E3552 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		C577896D1A80D44800E36B5A /* music-note.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "music-note.png"; sourceTree = "<group>"; };
 		C577896F1A80D6B400E36B5A /* black.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = black.jpeg; sourceTree = "<group>"; };
+		C59D9A4F1AB7D85B0005180F /* TheAmazingAudioEngine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = TheAmazingAudioEngine.xcodeproj; sourceTree = "<group>"; };
+		C59D9A581AB7D9C20005180F /* MyAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAudioPlayer.h; sourceTree = "<group>"; };
+		C59D9A591AB7D9C20005180F /* MyAudioPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MyAudioPlayer.mm; sourceTree = "<group>"; };
+		C59D9A761AB7E37F0005180F /* TPCircularBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = TPCircularBuffer.c; path = Modules/TPCircularBuffer/TPCircularBuffer.c; sourceTree = "<group>"; };
+		C59D9A771AB7E37F0005180F /* TPCircularBuffer+AudioBufferList.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "TPCircularBuffer+AudioBufferList.c"; path = "Modules/TPCircularBuffer/TPCircularBuffer+AudioBufferList.c"; sourceTree = "<group>"; };
+		C59D9A7A1AB7E3B80005180F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C59D9A7C1AB7E4030005180F /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		E732FEDA1A8E6A2500FA4C94 /* BonjourServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BonjourServer.h; sourceTree = "<group>"; };
 		E732FEDB1A8E6A2500FA4C94 /* BonjourServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BonjourServer.m; sourceTree = "<group>"; };
 		E7B258851A6A292200CDD0E5 /* CAPlayThroughObjC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CAPlayThroughObjC.mm; sourceTree = "<group>"; };
@@ -131,6 +169,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C59D9A7D1AB7E4030005180F /* Accelerate.framework in Frameworks */,
+				C59D9A7B1AB7E3B80005180F /* QuartzCore.framework in Frameworks */,
+				C59D9A751AB7E3020005180F /* libTheAmazingAudioEngine OS X.a in Frameworks */,
 				C5592F5A1A886C90003E3552 /* Security.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				8B9E523A0687AE9C00738FA5 /* AudioToolbox.framework in Frameworks */,
@@ -145,6 +186,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C59D9A581AB7D9C20005180F /* MyAudioPlayer.h */,
+				C59D9A591AB7D9C20005180F /* MyAudioPlayer.mm */,
 				E732FEDA1A8E6A2500FA4C94 /* BonjourServer.h */,
 				E732FEDB1A8E6A2500FA4C94 /* BonjourServer.m */,
 				C5592F521A886081003E3552 /* GCDAsyncSocket.h */,
@@ -202,6 +245,9 @@
 		29B97314FDCFA39411CA2CEA /* CAPlayThrough */ = {
 			isa = PBXGroup;
 			children = (
+				C59D9A761AB7E37F0005180F /* TPCircularBuffer.c */,
+				C59D9A771AB7E37F0005180F /* TPCircularBuffer+AudioBufferList.c */,
+				C59D9A4F1AB7D85B0005180F /* TheAmazingAudioEngine.xcodeproj */,
 				2BD33B6B17E7E7640057C926 /* ReadMe.txt */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				2B658EFF17E7E0FD00E2ADDE /* PublicUtility */,
@@ -236,6 +282,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C59D9A7C1AB7E4030005180F /* Accelerate.framework */,
+				C59D9A7A1AB7E3B80005180F /* QuartzCore.framework */,
 				C5592F591A886C90003E3552 /* Security.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
@@ -257,6 +305,15 @@
 				2B658F0417E7E0FD00E2ADDE /* CAStreamBasicDescription.cpp */,
 			);
 			path = PublicUtility;
+			sourceTree = "<group>";
+		};
+		C59D9A501AB7D85B0005180F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C59D9A551AB7D85C0005180F /* libTheAmazingAudioEngine iOS.a */,
+				C59D9A571AB7D85C0005180F /* libTheAmazingAudioEngine OS X.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -283,6 +340,7 @@
 			files = (
 				E7B2588B1A6A2D1900CDD0E5 /* CAPlayThroughObjCinterface.h in Headers */,
 				C5592F541A886081003E3552 /* GCDAsyncSocket.h in Headers */,
+				C59D9A5A1AB7D9C20005180F /* MyAudioPlayer.h in Headers */,
 				C5592F501A886064003E3552 /* TCPServer.h in Headers */,
 				8B9E54A30687B3BC00738FA5 /* AudioDeviceList.h in Headers */,
 				8B9E54B30687B59800738FA5 /* CAPlayThroughController.h in Headers */,
@@ -329,6 +387,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				C59D9A741AB7E29A0005180F /* PBXTargetDependency */,
 			);
 			name = CAPlayThrough;
 			productInstallPath = "$(HOME)/Applications";
@@ -354,6 +413,12 @@
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CAPlayThrough */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C59D9A501AB7D85B0005180F /* Products */;
+					ProjectRef = C59D9A4F1AB7D85B0005180F /* TheAmazingAudioEngine.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* CAPlayThrough */,
@@ -361,6 +426,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C59D9A551AB7D85C0005180F /* libTheAmazingAudioEngine iOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libTheAmazingAudioEngine iOS.a";
+			remoteRef = C59D9A541AB7D85C0005180F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C59D9A571AB7D85C0005180F /* libTheAmazingAudioEngine OS X.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libTheAmazingAudioEngine OS X.a";
+			remoteRef = C59D9A561AB7D85C0005180F /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		2BE43CF8154A070700317EFE /* Resources */ = {
@@ -410,6 +492,7 @@
 				C5592F551A886081003E3552 /* GCDAsyncSocket.m in Sources */,
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				C5592F511A886064003E3552 /* TCPServer.m in Sources */,
+				C59D9A781AB7E37F0005180F /* TPCircularBuffer.c in Sources */,
 				C50FB1431A6A9B0A00E65DE0 /* GCDAsyncUdpSocket.m in Sources */,
 				8B9E54A20687B3BC00738FA5 /* AudioDeviceList.cpp in Sources */,
 				8B9E54B40687B59800738FA5 /* CAPlayThroughController.mm in Sources */,
@@ -418,12 +501,22 @@
 				8B9E54DE0687B72500738FA5 /* AudioDevice.cpp in Sources */,
 				2B658F0A17E7E0FD00E2ADDE /* CARingBuffer.cpp in Sources */,
 				2B658F0E17E7E0FD00E2ADDE /* CAStreamBasicDescription.cpp in Sources */,
+				C59D9A5B1AB7D9C20005180F /* MyAudioPlayer.mm in Sources */,
+				C59D9A791AB7E37F0005180F /* TPCircularBuffer+AudioBufferList.c in Sources */,
 				E732FEDD1A8E6A2500FA4C94 /* BonjourServer.m in Sources */,
 				E7B258861A6A292200CDD0E5 /* CAPlayThroughObjC.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C59D9A741AB7E29A0005180F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "TheAmazingAudioEngine OS X";
+			targetProxy = C59D9A731AB7E29A0005180F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {

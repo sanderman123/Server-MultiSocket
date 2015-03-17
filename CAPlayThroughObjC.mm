@@ -88,7 +88,22 @@ void* initializeInstance(void *THIS){
         
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(controlTextDidEndEditing:) name:NSControlTextDidChangeNotification object:nil];
-
+        
+        audioController = [[AEAudioController alloc] initWithAudioDescription:[AEAudioController nonInterleavedFloatStereoAudioDescription]];
+        audioController.preferredBufferDuration = 0.0029;
+        //Add channels and players
+        player = [[MyAudioPlayer alloc] init];
+        channel = [audioController createChannelGroup];
+        //add channel i with player i to the audio controller as a new channel
+        [audioController addChannels:[NSArray arrayWithObject:player] toChannelGroup: channel];
+        float vol = 1.0;
+        //Initialize channel volumes
+        [audioController setVolume:vol forChannelGroup:channel];
+        [audioController setPan:0.0 forChannelGroup:channel];
+        NSError *error = [NSError alloc];
+        if(![audioController start:&error]){
+            NSLog(@"Error starting AudioController: %@", error.localizedDescription);
+        }
     }
 }
 
@@ -143,6 +158,9 @@ void* initializeInstance(void *THIS){
         }
         
         [_sharedCAPlayThroughObjC initTables];
+    } else {
+        //Playthrough
+        [player addToBufferWithoutTimeStampAudioBufferList:ablist];
     }
 }
 

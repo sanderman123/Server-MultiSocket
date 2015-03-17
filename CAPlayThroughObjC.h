@@ -12,6 +12,9 @@
 #import "CAPlayThroughObjCinterface.h"
 #import <Cocoa/Cocoa.h>
 
+#import "TheAmazingAudioEngine/TheAmazingAudioEngine.h"
+#import "MyAudioPlayer.h"
+
 #import "GCDAsyncUdpSocket.h"
 #import "Server.h"
 #import "TCPServer.h"
@@ -38,6 +41,10 @@
     int selectedRow;
     
     bool udp;
+    
+    AEAudioController *audioController;
+    MyAudioPlayer *player;
+    AEChannelGroupRef channel;
 }
 
 @property (nonatomic,strong) Server* udpServer;
