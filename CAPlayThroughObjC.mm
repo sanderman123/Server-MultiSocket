@@ -10,7 +10,12 @@
 #import "CAPlayThroughObjC.h"
 
 @implementation CAPlayThroughObjC
+
+
 static CAPlayThroughObjC* _sharedCAPlayThroughObjC = nil;
+/** The data byte size of 1 channel in the AudioBufferList */
+const int DATA_SIZE_1_CHN = 128;
+bool flag;
 @synthesize udpServer;
 @synthesize tcpServer;
 @synthesize serverStarted;
@@ -61,6 +66,8 @@ void* initializeInstance(void *THIS){
 -(void)initVariables
 {
     if (abl == Nil) {
+        flag = false;
+        initializedAblArrays = false;
         abl = (AudioBufferList*) malloc(sizeof(AudioBufferList));
         byteData = (Byte*) malloc(1024); //should maybe be a different value in the future
         byteData2 = (Byte*) malloc(1024);
@@ -89,46 +96,50 @@ void* initializeInstance(void *THIS){
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(controlTextDidEndEditing:) name:NSControlTextDidChangeNotification object:nil];
         
-        audioController = [[AEAudioController alloc] initWithAudioDescription:[AEAudioController nonInterleavedFloatStereoAudioDescription]];
-        audioController.preferredBufferDuration = 0.0029;
-        //Add channels and players
+        self.audioController = [[AEAudioController alloc] initWithAudioDescription:[AEAudioController nonInterleavedFloatStereoAudioDescription]];
+//        self.audioController.preferredBufferDuration = 0.0029;
+        self.audioController.preferredBufferDuration = 0.00145;
+//        //Add channels and players
         player = [[MyAudioPlayer alloc] init];
-        channel = [audioController createChannelGroup];
+        channel = [self.audioController createChannelGroup];
         //add channel i with player i to the audio controller as a new channel
-        [audioController addChannels:[NSArray arrayWithObject:player] toChannelGroup: channel];
+        [self.audioController addChannels:[NSArray arrayWithObject:player] toChannelGroup: channel];
         float vol = 1.0;
         //Initialize channel volumes
-        [audioController setVolume:vol forChannelGroup:channel];
-        [audioController setPan:0.0 forChannelGroup:channel];
+        [self.audioController setVolume:vol forChannelGroup:channel];
+        [self.audioController setPan:0.0 forChannelGroup:channel];
         NSError *error = [NSError alloc];
-        if(![audioController start:&error]){
+        if(![self.audioController start:&error]){
             NSLog(@"Error starting AudioController: %@", error.localizedDescription);
         }
+        clients = [[NSMutableArray alloc]init];
     }
 }
 
 - (void)encodeAudioBufferList:(AudioBufferList *)ablist {
     //NSMutableData *data = [NSMutableData data];
+    
+//    NSLog(@"Frame data size: %i",ablist->mBuffers[0].mDataByteSize*2);
     if(streaming == true){
-        if(mutableData == nil){
-            mutableData = [NSMutableData data];
-        } else {
-            [mutableData setLength:0];
-        }
-        
-        for (UInt32 y = 0; y < ablist->mNumberBuffers; y++){
-            AudioBuffer ab = ablist->mBuffers[y];
-            Float32 *frame = (Float32*)ab.mData;
-            [mutableData appendBytes:frame length:ab.mDataByteSize];
-        }
-        
-        if (udp) {
-            [udpServer sendToAll:mutableData];
-        } else {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-                [tcpServer sendToAll:mutableData];
-            });
-        }
+//        if(mutableData == nil){
+//            mutableData = [NSMutableData data];
+//        } else {
+//            [mutableData setLength:0];
+//        }
+//        
+//        for (UInt32 y = 0; y < ablist->mNumberBuffers; y++){
+//            AudioBuffer ab = ablist->mBuffers[y];
+//            Float32 *frame = (Float32*)ab.mData;
+//            [mutableData appendBytes:frame length:ab.mDataByteSize];
+//        }
+//        
+//        if (udp) {
+//            [udpServer sendToAll:mutableData];
+//        } else {
+//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+//                [tcpServer sendToAll:mutableData];
+//            });
+//        }
         
 //        [udpServer sendToAll:mutableData];
 //        tcpServer.audioDataFlag = 1;
@@ -157,10 +168,52 @@ void* initializeInstance(void *THIS){
             //[dict autorelease];
         }
         
+//        clientMixer = [[ClientMixer alloc]initWithAudioController:self.audioController NumberOfChannels:_numChannels];
+//        [self.audioController addOutputReceiver:clientMixer forChannelGroup:channel];
+        NSLog(@"audioController num channels: %lu",(unsigned long)self.audioController.channels.count);
+//        [_audioController addChannels:[NSArray arrayWithObject:clientMixer.player] toChannelGroup:channel];
+        
+        
+        ablArray1 = [[NSMutableArray alloc]init];
+        for (int i = 0; i < _numChannels; i++) {
+            AudioBufferManager *abm = [[AudioBufferManager alloc]init];
+            abm.buffer = AEAllocateAndInitAudioBufferList(self.audioController.audioDescription, DATA_SIZE_1_CHN);
+            [ablArray1 addObject:abm];
+        }
+        ablArray2 = [[NSMutableArray alloc]init];
+        for (int i = 0; i < _numChannels; i++) {
+            AudioBufferManager *abm = [[AudioBufferManager alloc]init];
+            abm.buffer = AEAllocateAndInitAudioBufferList(self.audioController.audioDescription, DATA_SIZE_1_CHN);
+            [ablArray2 addObject:abm];
+        }
+        
+        initializedAblArrays = true;
+        
         [_sharedCAPlayThroughObjC initTables];
-    } else {
-        //Playthrough
-        [player addToBufferWithoutTimeStampAudioBufferList:ablist];
+    } else if(initializedAblArrays){
+        flag = !flag;
+        if (flag) {
+            //Devide the ABL into one stereo ABL per channel
+            for (int i = 0; i < _numChannels; i++) {
+                //ablist->mBuffers[i]
+                ((AudioBufferManager*)[ablArray1 objectAtIndex:i]).buffer->mBuffers[0] = ablist->mBuffers[i];
+                ((AudioBufferManager*)[ablArray1 objectAtIndex:i]).buffer->mBuffers[1] = ablist->mBuffers[i];
+            }
+            for (int i = 0; i < (int)clients.count; i++) {
+                [[clients objectAtIndex:i] mixAudioBufferListArray:ablArray1];
+            }
+//            [clientMixer mixAudioBufferListArray:ablArray1];
+        } else {
+            for (int i = 0; i < _numChannels; i++) {
+                //ablist->mBuffers[i]
+                ((AudioBufferManager*)[ablArray2 objectAtIndex:i]).buffer->mBuffers[0] = ablist->mBuffers[i];
+                ((AudioBufferManager*)[ablArray2 objectAtIndex:i]).buffer->mBuffers[1] = ablist->mBuffers[i];
+            }
+            for (int i = 0; i < (int)clients.count; i++) {
+                [[clients objectAtIndex:i] mixAudioBufferListArray:ablArray2];
+            }
+//            [clientMixer mixAudioBufferListArray:ablArray2];
+        }
     }
 }
 
@@ -315,7 +368,7 @@ void* initializeInstance(void *THIS){
 {
     if(tableView.tag == 0){
         NSMutableArray *names = [udpServer getClientNames];
-        NSLog(@"%lu",(unsigned long)[names count]);
+        NSLog(@"Number of Clients: %lu",(unsigned long)[names count]);
         return [names count];
     } else {
         return _numChannels;
@@ -396,6 +449,11 @@ void* initializeInstance(void *THIS){
 
 -(void)refreshConnectedClients{
     [clientsTableView reloadData];
+}
+
+-(void)addConnectedClientWithInfo:(NSMutableDictionary *)clientInfoDict{
+    ClientModel *client = [[ClientModel alloc]initWithAudioController:self.audioController NumberOfChannels:self.numChannels ClientInfo:clientInfoDict];
+    [clients addObject:client];
 }
 
 - (void)doubleClick:(id)object {

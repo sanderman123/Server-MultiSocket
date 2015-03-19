@@ -52,7 +52,8 @@
     //New client
     clientCount++;
     //Open a new socket
-    GCDAsyncUdpSocket *streamSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)];
+    dispatch_queue_t bufferQueue = dispatch_queue_create("com.mydomain.app.newimagesinbackground", NULL);
+    GCDAsyncUdpSocket *streamSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:bufferQueue/*dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)*/];
     
     //Open a unique port
     NSError *error = [NSError alloc];
@@ -155,6 +156,7 @@
 //            for (NSDictionary *item in client) {
 //                NSLog(@"Updated item %@", item);
 //            }
+            [[CAPlayThroughObjC sharedCAPlayThroughObjC:nil] addConnectedClientWithInfo:client];
             return;
         }
     }

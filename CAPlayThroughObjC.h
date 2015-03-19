@@ -14,6 +14,8 @@
 
 #import "TheAmazingAudioEngine/TheAmazingAudioEngine.h"
 #import "MyAudioPlayer.h"
+#import "ClientModel.h"
+#import "AudioBufferManager.h"
 
 #import "GCDAsyncUdpSocket.h"
 #import "Server.h"
@@ -38,15 +40,19 @@
     NSImage *defaultImage;
 
     bool initializedChannels;
+    bool initializedAblArrays;
     int selectedRow;
     
     bool udp;
     
-    AEAudioController *audioController;
     MyAudioPlayer *player;
     AEChannelGroupRef channel;
+//    ClientMixer *clientMixer;
+    NSMutableArray *clients;
+    NSMutableArray *ablArray1;
+    NSMutableArray *ablArray2;
 }
-
+@property (nonatomic,strong) AEAudioController *audioController;
 @property (nonatomic,strong) Server* udpServer;
 @property (nonatomic,strong) TCPServer* tcpServer;
 @property (nonatomic,assign) bool streaming;
@@ -61,6 +67,7 @@
 - (AudioBufferList *) decodeAudioBufferList: (NSData *) data;
 
 - (void) refreshConnectedClients;
+- (void) addConnectedClientWithInfo:(NSMutableDictionary*)clientInfoDict;
 - (void)doubleClick:(id)nid;
 
 @property (nonatomic, strong)IBOutlet NSButton *btnStartServer;
