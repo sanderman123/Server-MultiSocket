@@ -106,37 +106,41 @@ static void receiverCallback(__unsafe_unretained ClientModel *THIS,
                              const AudioTimeStamp *time,
                              UInt32 frames,
                              AudioBufferList *audio) {
-    THIS->flag = !THIS->flag;
-    if(THIS->flag){
+//    THIS->flag = !THIS->flag;
+//    if(THIS->flag){
         if (THIS->mutableData1 == nil) {
             THIS->mutableData1 = [NSMutableData data];
         } else {
             [THIS->mutableData1 setLength:0];
+            THIS->mutableData1 = nil;
+            THIS->mutableData1 = [NSMutableData data];
         }
     
         for (UInt32 y = 0; y < audio->mNumberBuffers; y++){
             AudioBuffer ab = audio->mBuffers[0];
-            Float32 *frame = (Float32*)ab.mData;
-            [THIS->mutableData1 appendBytes:frame length:ab.mDataByteSize];
-        }
-        // Send audio to socket
-        [THIS->_streamSocket sendData:THIS->mutableData1 toAddress:THIS->_audioAddress withTimeout:-1 tag:0];
-    } else {
-        if (THIS->mutableData2 == nil) {
-            THIS->mutableData2 = [NSMutableData data];
-        } else {
-            [THIS->mutableData2 setLength:0];
+            [THIS->mutableData1 appendBytes:ab.mData length:ab.mDataByteSize];
+//            Float32 *frame = (Float32*)ab.mData;
+//            [THIS->mutableData1 appendBytes:frame length:ab.mDataByteSize];
         }
     
-        for (UInt32 y = 0; y < audio->mNumberBuffers; y++){
-            AudioBuffer ab = audio->mBuffers[0];
-            Float32 *frame = (Float32*)ab.mData;
-            [THIS->mutableData2 appendBytes:frame length:ab.mDataByteSize];
-//            [THIS->_mutableData2 setData:(__bridge NSData *)(ab.mData)];
-        }
         // Send audio to socket
-        [THIS->_streamSocket sendData:THIS->mutableData2 toAddress:THIS->_audioAddress withTimeout:-1 tag:0];
-    }
+        [THIS->_streamSocket sendData:THIS->mutableData1 toAddress:THIS->_audioAddress withTimeout:-1 tag:222];
+//    } else {
+//        if (THIS->mutableData2 == nil) {
+//            THIS->mutableData2 = [NSMutableData data];
+//        } else {
+//            [THIS->mutableData2 setLength:0];
+//        }
+//    
+//        for (UInt32 y = 0; y < audio->mNumberBuffers; y++){
+//            AudioBuffer ab = audio->mBuffers[0];
+//            Float32 *frame = (Float32*)ab.mData;
+//            [THIS->mutableData2 appendBytes:frame length:ab.mDataByteSize];
+////            [THIS->_mutableData2 setData:(__bridge NSData *)(ab.mData)];
+//        }
+//        // Send audio to socket
+//        [THIS->_streamSocket sendData:THIS->mutableData2 toAddress:THIS->_audioAddress withTimeout:-1 tag:0];
+//    }
 }
 
 -(AEAudioControllerAudioCallback)receiverCallback {

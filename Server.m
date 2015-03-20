@@ -17,8 +17,9 @@
 - (void) createServerOnPort: (UInt16) p {
     port = p;
 //    udpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
-    udpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
-    
+//    self.bufferQueue =
+    dispatch_queue_t serverQueue = dispatch_queue_create("com.mydomain.app.serverqueue", NULL);
+    udpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:serverQueue];//(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
     NSError *error = [NSError alloc];
     if (![udpSocket bindToPort:port error:&error]) {
         NSLog(@"Error binding port: %@", error.localizedDescription);
@@ -37,14 +38,14 @@
     clients = [[NSMutableArray alloc]init];
 //    clientNames = [[NSMutableArray alloc]init];
     clientCount = 0;
-    tag = 0;
+    tag = 123;
     
     NSLog(@"UDP server started on port %i", port);
 }
 
 - (void) sendToAll: (NSData *) data {
     for (NSDictionary *client in clients) {
-        [[client objectForKey:@"streamSocket"] sendData:data toAddress:[client objectForKey:@"audioAddress"] withTimeout:-1 tag:0];
+        [[client objectForKey:@"streamSocket"] sendData:data toAddress:[client objectForKey:@"audioAddress"] withTimeout:-1 tag:9999];
     }
 }
 
@@ -52,8 +53,8 @@
     //New client
     clientCount++;
     //Open a new socket
-    dispatch_queue_t bufferQueue = dispatch_queue_create("com.mydomain.app.newimagesinbackground", NULL);
-    GCDAsyncUdpSocket *streamSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:bufferQueue/*dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)*/];
+    dispatch_queue_t bufferQueue = dispatch_queue_create("com.mydomain.app.streamqueue", NULL);
+    GCDAsyncUdpSocket *streamSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:bufferQueue /*dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)*/];
     
     //Open a unique port
     NSError *error = [NSError alloc];
@@ -81,7 +82,7 @@
 -(void)sendUpdateToClients{
     NSData* data = [self getChannelNamesAsData];
     for (int i = 0; i < clientCount; i++) {
-        [udpSocket sendData:data toAddress:[[clients objectAtIndex:i] objectForKey:@"updateAddress"] withTimeout:-1 tag:0];
+        [udpSocket sendData:data toAddress:[[clients objectAtIndex:i] objectForKey:@"updateAddress"] withTimeout:-1 tag:9998];
     }
     NSLog(@"Update sent");
 }
@@ -92,7 +93,7 @@
     NSString *str = [NSString stringWithFormat:@"image:%i:%@:%@",index,name,format];
     NSData *strData = [str dataUsingEncoding:NSUTF8StringEncoding];
     for (int i = 0; i < clientCount; i++) {
-        [udpSocket sendData:strData toAddress:[[clients objectAtIndex:i] objectForKey:@"updateAddress"] withTimeout:-1 tag:0];
+        [udpSocket sendData:strData toAddress:[[clients objectAtIndex:i] objectForKey:@"updateAddress"] withTimeout:-1 tag:9997];
     }
     
 //    NSData *imageData = [[NSData alloc]initWithData:[image TIFFRepresentation]];
@@ -142,21 +143,24 @@
 //        NSLog(@"New item %@", item);
 //    }
     
+    
     for (int i = 0; i < clientCount; i++) {
         NSMutableDictionary *client = [clients objectAtIndex:i];
-        if ([[client valueForKey:@"uuid"] isEqualToString: [jsonDictionary valueForKey:@"uuid"]]) {
+        
+        if (client != nil && [[client valueForKey:@"uuid"] isEqualToString: [jsonDictionary valueForKey:@"uuid"]]) {
             //Register audio streaming and update sockets to the client
             if ([[jsonDictionary valueForKey:@"socket"] isEqualToString:@"updateSocket"]) {
                 //Register an update socket to the client
                 [client setObject:address forKey:@"updateAddress"];
             } else if ([[jsonDictionary valueForKey:@"socket"] isEqualToString:@"audioSocket"]) {
-                //Register an audio stream socket to the client
+                //Register an audio stream socket to the client and complete the client adding process
                 [client setObject:address forKey:@"audioAddress"];
+                [[CAPlayThroughObjC sharedCAPlayThroughObjC:nil] addConnectedClientWithInfo:client];
             }
 //            for (NSDictionary *item in client) {
 //                NSLog(@"Updated item %@", item);
 //            }
-            [[CAPlayThroughObjC sharedCAPlayThroughObjC:nil] addConnectedClientWithInfo:client];
+            
             return;
         }
     }
