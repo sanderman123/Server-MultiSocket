@@ -19,7 +19,7 @@
 //    udpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
 //    self.bufferQueue =
     dispatch_queue_t serverQueue = dispatch_queue_create("com.mydomain.app.serverqueue", NULL);
-    udpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:serverQueue];//(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+    udpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:serverQueue /*dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)*/];
     NSError *error = [NSError alloc];
     if (![udpSocket bindToPort:port error:&error]) {
         NSLog(@"Error binding port: %@", error.localizedDescription);
@@ -53,8 +53,8 @@
     //New client
     clientCount++;
     //Open a new socket
-    dispatch_queue_t bufferQueue = dispatch_queue_create("com.mydomain.app.streamqueue", NULL);
-    GCDAsyncUdpSocket *streamSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:bufferQueue /*dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)*/];
+    dispatch_queue_t streamQueue = dispatch_queue_create("com.mydomain.app.streamqueue", NULL);
+    GCDAsyncUdpSocket *streamSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:streamQueue /*Queuedispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)*/];
     
     //Open a unique port
     NSError *error = [NSError alloc];
