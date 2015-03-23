@@ -68,6 +68,7 @@
 
 - (void) refreshConnectedClients;
 - (void) addConnectedClientWithInfo:(NSMutableDictionary*)clientInfoDict;
+- (void) updateClientChannelInfo:(NSData*)infoData;
 - (void)doubleClick:(id)nid;
 
 @property (nonatomic, strong)IBOutlet NSButton *btnStartServer;

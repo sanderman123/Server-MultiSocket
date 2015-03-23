@@ -49,6 +49,8 @@
 		C50FB1481A6A9B1700E65DE0 /* Server.h in Headers */ = {isa = PBXBuildFile; fileRef = C50FB1451A6A9B1700E65DE0 /* Server.h */; };
 		C50FB1491A6A9B1700E65DE0 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = C50FB1461A6A9B1700E65DE0 /* Server.m */; };
 		C50FB14A1A6A9B1700E65DE0 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = C50FB1461A6A9B1700E65DE0 /* Server.m */; };
+		C54ABB701ABC242A00BAB6C0 /* MyChannelGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = C54ABB6E1ABC242A00BAB6C0 /* MyChannelGroup.h */; };
+		C54ABB711ABC242A00BAB6C0 /* MyChannelGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = C54ABB6F1ABC242A00BAB6C0 /* MyChannelGroup.m */; };
 		C5592F501A886064003E3552 /* TCPServer.h in Headers */ = {isa = PBXBuildFile; fileRef = C5592F4E1A886064003E3552 /* TCPServer.h */; };
 		C5592F511A886064003E3552 /* TCPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = C5592F4F1A886064003E3552 /* TCPServer.m */; };
 		C5592F541A886081003E3552 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = C5592F521A886081003E3552 /* GCDAsyncSocket.h */; };
@@ -136,6 +138,8 @@
 		C50FB1401A6A9B0A00E65DE0 /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
 		C50FB1451A6A9B1700E65DE0 /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
 		C50FB1461A6A9B1700E65DE0 /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
+		C54ABB6E1ABC242A00BAB6C0 /* MyChannelGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyChannelGroup.h; sourceTree = "<group>"; };
+		C54ABB6F1ABC242A00BAB6C0 /* MyChannelGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyChannelGroup.m; sourceTree = "<group>"; };
 		C5592F4E1A886064003E3552 /* TCPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCPServer.h; sourceTree = "<group>"; };
 		C5592F4F1A886064003E3552 /* TCPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCPServer.m; sourceTree = "<group>"; };
 		C5592F521A886081003E3552 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
@@ -221,6 +225,8 @@
 				C50FB1461A6A9B1700E65DE0 /* Server.m */,
 				C59D9A801AB837640005180F /* ClientModel.h */,
 				C59D9A811AB837640005180F /* ClientModel.m */,
+				C54ABB6E1ABC242A00BAB6C0 /* MyChannelGroup.h */,
+				C54ABB6F1ABC242A00BAB6C0 /* MyChannelGroup.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -361,6 +367,7 @@
 				C50FB1411A6A9B0A00E65DE0 /* GCDAsyncUdpSocket.h in Headers */,
 				8B9E54CF0687B6EB00738FA5 /* CAPlayThrough.h in Headers */,
 				C50FB1471A6A9B1700E65DE0 /* Server.h in Headers */,
+				C54ABB701ABC242A00BAB6C0 /* MyChannelGroup.h in Headers */,
 				8B9E54DF0687B72500738FA5 /* AudioDevice.h in Headers */,
 				E7B258891A6A29E400CDD0E5 /* CAPlayThroughObjC.h in Headers */,
 				C59D9A871AB84C9D0005180F /* AudioBufferManager.h in Headers */,
@@ -518,6 +525,7 @@
 				2B658F0E17E7E0FD00E2ADDE /* CAStreamBasicDescription.cpp in Sources */,
 				C59D9A5B1AB7D9C20005180F /* MyAudioPlayer.mm in Sources */,
 				C59D9A791AB7E37F0005180F /* TPCircularBuffer+AudioBufferList.c in Sources */,
+				C54ABB711ABC242A00BAB6C0 /* MyChannelGroup.m in Sources */,
 				E732FEDD1A8E6A2500FA4C94 /* BonjourServer.m in Sources */,
 				C59D9A881AB84C9D0005180F /* AudioBufferManager.m in Sources */,
 				E7B258861A6A292200CDD0E5 /* CAPlayThroughObjC.mm in Sources */,

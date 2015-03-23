@@ -502,4 +502,14 @@ void* initializeInstance(void *THIS){
     }
 }
 
+-(void)updateClientChannelInfo:(NSData *)infoData{
+    NSDictionary *infoDict = [NSJSONSerialization JSONObjectWithData:infoData options:0 error:nil];
+    for (int i = 0; i < (int)clients.count; i++) {
+        ClientModel *cm = (ClientModel*)[clients objectAtIndex:i];
+        if([cm.uuid isEqualToString:[infoDict objectForKey:@"uuid"]]){
+            [cm updateChannelSettings:infoDict];
+        }
+    }
+}
+
 @end

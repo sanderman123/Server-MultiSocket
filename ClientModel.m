@@ -10,6 +10,7 @@
 //#import "MyAudioPlayer.h"
 #import "AudioBufferManager.h"
 #import "CAPlayThroughObjC.h"
+#import "MyChannelGroup.h"
 
 @implementation ClientModel
 
@@ -38,8 +39,12 @@
 //            [self addReverbToChannelGroup:channel];
             
 //            }
+            
             [self.audioController setVolume:1.0 forChannelGroup:channel];
             [self.audioPlayers addObject:player];
+            MyChannelGroup *mcgr = [[MyChannelGroup alloc]init];
+            mcgr.aecgRef = channel;
+            [self.channelGroups addObject:mcgr];
         }
         
         [audioController addOutputReceiver:self forChannelGroup:mainChannel];
@@ -125,6 +130,7 @@ static void receiverCallback(__unsafe_unretained ClientModel *THIS,
     
         // Send audio to socket
         [THIS->_streamSocket sendData:THIS->mutableData1 toAddress:THIS->_audioAddress withTimeout:-1 tag:222];
+    
 //    } else {
 //        if (THIS->mutableData2 == nil) {
 //            THIS->mutableData2 = [NSMutableData data];
@@ -146,5 +152,16 @@ static void receiverCallback(__unsafe_unretained ClientModel *THIS,
 -(AEAudioControllerAudioCallback)receiverCallback {
     return receiverCallback;
 }
+
+-(void)updateChannelSettings:(NSDictionary *)settingsDict{
+    int chan = [[settingsDict objectForKey:@"channel"] intValue] - 1;
+    AEChannelGroupRef cgr = ((MyChannelGroup*)[self.channelGroups objectAtIndex:chan]).aecgRef;
+
+    [self.audioController setVolume:[[settingsDict objectForKey:@"volume"] floatValue] forChannelGroup:cgr];
+    [self.audioController setPan: [[settingsDict objectForKey:@"pan"] floatValue] forChannelGroup:cgr];
+    [self.audioController setMuted: [[settingsDict objectForKey:@"muted"] boolValue] forChannelGroup:cgr];
+}
+
+
 
 @end

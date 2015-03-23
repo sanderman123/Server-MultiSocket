@@ -35,5 +35,5 @@
 -(instancetype)initWithAudioController:(AEAudioController*)audioController NumberOfChannels:(int)n ClientInfo:(NSMutableDictionary*) clientInfoDict;
 -(void)addToCircularBuffer:(AudioBufferList*)abl ChannelIndex:(int)index;
 -(void)mixAudioBufferListArray:(NSArray*)ablArray;
-
+-(void)updateChannelSettings:(NSDictionary*)settingsDict;
 @end
