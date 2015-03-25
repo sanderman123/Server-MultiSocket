@@ -100,6 +100,8 @@ void* initializeInstance(void *THIS){
         self.audioController = [[AEAudioController alloc] initWithAudioDescription:[AEAudioController nonInterleavedFloatStereoAudioDescription]];
 //        self.audioController.preferredBufferDuration = 0.0029;
         self.audioController.preferredBufferDuration = 0.00145;
+//        self.audioController.preferredBufferDuration = 0.000725;
+        
 //        //Add channels and players
         player = [[MyAudioPlayer alloc] init];
         channel = [self.audioController createChannelGroup];

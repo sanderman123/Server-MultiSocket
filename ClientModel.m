@@ -23,7 +23,7 @@
         numChannels = n;
         NSLog(@"Number of channels: %i",numChannels);
 
-        prepareAndSendDataThread = dispatch_queue_create("com.data.prepare.send", NULL);
+        prepareAndSendDataThread = dispatch_queue_create("com.ClientModel.DataPrepareSend", NULL);
         
         self.audioPlayers = [[NSMutableArray alloc]init];
         self.channelGroups = [[NSMutableArray alloc]init];
@@ -124,46 +124,61 @@ static void receiverCallback(__unsafe_unretained ClientModel *THIS,
     dispatch_async(prepareAndSendDataThread, ^{
         if (audio) {
             
-        flag = !flag;
-        if(flag){
-            if (mutableData1 == nil) {
-                mutableData1 = [NSMutableData data];
+            flag = !flag;
+            if(flag){
+                if (mutableData1 == nil) {
+                    mutableData1 = [NSMutableData data];
+                } else {
+                    [mutableData1 setLength:0];
+                    mutableData1 = nil;
+                    mutableData1 = [NSMutableData data];
+                }
+                
+                for (UInt32 y = 0; y < audio->mNumberBuffers; y++){
+                    AudioBuffer ab = audio->mBuffers[y];
+                    if (ab.mDataByteSize) {
+                        [mutableData1 appendBytes:ab.mData length:ab.mDataByteSize];
+                    } else {
+                        NSLog(@"Error: ab is nil");
+                    }
+                    
+                    //                            Float32 *frame = (Float32*)ab.mData;
+                    //                            [mutableData1 appendBytes:frame length:ab.mDataByteSize];
+                }
+                
+                // Send audio to socket
+                [_streamSocket sendData:mutableData1 toAddress:_audioAddress withTimeout:-1 tag:222];
+                
+                //NSLog(@"Audio Sent");
             } else {
-                [mutableData1 setLength:0];
-                mutableData1 = nil;
-                mutableData1 = [NSMutableData data];
+                if (mutableData2 == nil) {
+                    mutableData2 = [NSMutableData data];
+                } else {
+                    [mutableData2 setLength:0];
+                    mutableData2 = nil;
+                    mutableData2 = [NSMutableData data];
+                }
+                
+                AudioBuffer ab1 = audio->mBuffers[0];
+                [mutableData2 appendBytes:ab1.mData length:ab1.mDataByteSize];
+                AudioBuffer ab2 = audio->mBuffers[1];
+                [mutableData2 appendBytes:ab2.mData length:ab2.mDataByteSize];
+                
+                //            for (UInt32 y = 0; y < audio->mNumberBuffers; y++){
+                //                AudioBuffer ab = audio->mBuffers[y];
+                //                if (ab.mDataByteSize) {
+                //                    [mutableData2 appendBytes:ab.mData length:ab.mDataByteSize];
+                //                } else {
+                //                    NSLog(@"Error: ab is nil");
+                //                }
+                
+                //                        Float32 *frame = (Float32*)ab.mData;
+                //                        [mutableData2 appendBytes:frame length:ab.mDataByteSize];
+                //            }
+                
+                // Send audio to socket
+                [_streamSocket sendData:mutableData2 toAddress:_audioAddress withTimeout:-1 tag:223];
             }
-            
-            for (UInt32 y = 0; y < audio->mNumberBuffers; y++){
-                AudioBuffer ab = audio->mBuffers[y];
-                [mutableData1 appendBytes:ab.mData length:ab.mDataByteSize];
-//                            Float32 *frame = (Float32*)ab.mData;
-//                            [mutableData1 appendBytes:frame length:ab.mDataByteSize];
-            }
-            
-            // Send audio to socket
-            [_streamSocket sendData:mutableData1 toAddress:_audioAddress withTimeout:-1 tag:222];
-            
-            //NSLog(@"Audio Sent");
-        } else {
-            if (mutableData2 == nil) {
-                mutableData2 = [NSMutableData data];
-            } else {
-                [mutableData2 setLength:0];
-                mutableData2 = nil;
-                mutableData2 = [NSMutableData data];
-            }
-
-            for (UInt32 y = 0; y < audio->mNumberBuffers; y++){
-                AudioBuffer ab = audio->mBuffers[y];
-                [mutableData2 appendBytes:ab.mData length:ab.mDataByteSize];
-//                        Float32 *frame = (Float32*)ab.mData;
-//                        [mutableData2 appendBytes:frame length:ab.mDataByteSize];
-            }
-            
-            // Send audio to socket
-            [_streamSocket sendData:mutableData2 toAddress:_audioAddress withTimeout:-1 tag:223];
-        }
         } else {
             NSLog(@"Audio buffer list empty!");
         }
