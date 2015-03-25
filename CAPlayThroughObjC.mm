@@ -195,8 +195,10 @@ void* initializeInstance(void *THIS){
             }
             
             initializedAblArrays = true;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_sharedCAPlayThroughObjC initTables];
+            });
             
-            [_sharedCAPlayThroughObjC initTables];
         } else if(initializedAblArrays){
             flag = !flag;
             if (flag) {
@@ -246,7 +248,6 @@ void* initializeInstance(void *THIS){
     
     channelsTableContainer = [[NSScrollView alloc] initWithFrame:NSMakeRect(200, 0, 230, 200)];
     channelsTableView = [[NSTableView alloc]initWithFrame:NSMakeRect(0, 0, 230, 200)];
-    
     [channelsTableView setDataSource:self];
     [channelsTableView setDelegate:self];
     

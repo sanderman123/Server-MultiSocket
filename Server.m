@@ -71,7 +71,7 @@
     [jsonDictionary setObject:streamSocket forKey:@"streamSocket"];
     
     dispatch_queue_t updateQueue = dispatch_queue_create("com.mydomain.app.updatequeue", NULL);
-    GCDAsyncUdpSocket *updateSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:updateQueue /*Queuedispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)*/];
+    GCDAsyncUdpSocket *updateSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:streamQueue /*Queuedispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)*/];
     
     //Open a unique port
     error = [NSError alloc];
@@ -200,7 +200,10 @@
         for (int i = 0; i < clientCount; i++) {
             NSMutableDictionary *client = [clients objectAtIndex:i];
             if (client != nil && [[client valueForKey:@"uuid"] isEqualToString: [jsonDictionary valueForKey:@"uuid"]]) {
-                [[CAPlayThroughObjC sharedCAPlayThroughObjC:nil] updateClientChannelInfo:data];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[CAPlayThroughObjC sharedCAPlayThroughObjC:nil] updateClientChannelInfo:data];
+                });
+                
             }
 //            if (address == [client objectForKey:@"updateAddress"]) {
 //                //Update channel settings for client

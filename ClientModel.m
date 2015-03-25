@@ -136,7 +136,7 @@ static void receiverCallback(__unsafe_unretained ClientModel *THIS,
                 
                 for (UInt32 y = 0; y < audio->mNumberBuffers; y++){
                     AudioBuffer ab = audio->mBuffers[y];
-                    if (ab.mDataByteSize) {
+                    if (ab.mData != nil) {
                         [mutableData1 appendBytes:ab.mData length:ab.mDataByteSize];
                     } else {
                         NSLog(@"Error: ab is nil");
@@ -160,9 +160,15 @@ static void receiverCallback(__unsafe_unretained ClientModel *THIS,
                 }
                 
                 AudioBuffer ab1 = audio->mBuffers[0];
-                [mutableData2 appendBytes:ab1.mData length:ab1.mDataByteSize];
+                if (ab1.mData != nil) {
+                    [mutableData2 appendBytes:ab1.mData length:ab1.mDataByteSize];
+                }
+                
                 AudioBuffer ab2 = audio->mBuffers[1];
-                [mutableData2 appendBytes:ab2.mData length:ab2.mDataByteSize];
+                if (ab2.mData != nil) {
+                    [mutableData2 appendBytes:ab2.mData length:ab2.mDataByteSize];
+                }
+                
                 
                 //            for (UInt32 y = 0; y < audio->mNumberBuffers; y++){
                 //                AudioBuffer ab = audio->mBuffers[y];
