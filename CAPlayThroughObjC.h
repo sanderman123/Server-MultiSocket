@@ -51,6 +51,8 @@
     NSMutableArray *clients;
     NSMutableArray *ablArray1;
     NSMutableArray *ablArray2;
+    
+    dispatch_queue_t pepareAblThread;
 }
 @property (nonatomic,strong) AEAudioController *audioController;
 @property (nonatomic,strong) Server* udpServer;

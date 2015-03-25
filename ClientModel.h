@@ -17,6 +17,9 @@
     NSMutableData *mutableData1;
     NSMutableData *mutableData2;
     bool flag;
+    dispatch_queue_t prepareAndSendDataThread;
+    NSData *dataL;
+    NSData *dataR;
 }
 //@property (nonatomic,strong) NSMutableData *mutableData1;
 //@property (nonatomic,strong) NSMutableData *mutableData2;

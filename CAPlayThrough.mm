@@ -845,7 +845,9 @@ void CAPlayThroughHost::CreatePlayThrough(AudioDeviceID input, AudioDeviceID out
 {
 	mPlayThrough = new CAPlayThrough(input, output);
     StreamListenerQueue = dispatch_queue_create("com.CAPlayThough.StreamListenerQueue", DISPATCH_QUEUE_SERIAL);
-    //if (StreamListenerQueue) dispatch_set_context(StreamListenerQueue, this);
+    TransferAudioBufferQueue = dispatch_queue_create("com.CAPlayThough.TransferAudioBufferQueue", DISPATCH_QUEUE_SERIAL);
+    
+//    if (StreamListenerQueue) dispatch_set_context(StreamListenerQueue, this);
 	AddDeviceListeners(input);
 }
 

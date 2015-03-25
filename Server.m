@@ -49,12 +49,16 @@
     }
 }
 
+-(void)udpSocketDidClose:(GCDAsyncUdpSocket *)sock withError:(NSError *)error{
+    NSLog(@"Socket closed with error: %@",error.localizedDescription);
+}
+
 -(void)addClientWithAddress:(NSData *)address AndInfo:(NSMutableDictionary*) jsonDictionary{
     //New client
     clientCount++;
     //Open a new socket
     dispatch_queue_t streamQueue = dispatch_queue_create("com.mydomain.app.streamqueue", NULL);
-    GCDAsyncUdpSocket *streamSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:streamQueue /*Queuedispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)*/];
+    GCDAsyncUdpSocket *streamSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:streamQueue/*dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)*/];
     
     //Open a unique port
     NSError *error = [NSError alloc];

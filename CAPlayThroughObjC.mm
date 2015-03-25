@@ -14,7 +14,7 @@
 
 static CAPlayThroughObjC* _sharedCAPlayThroughObjC = nil;
 /** The data byte size of 1 channel in the AudioBufferList */
-const int DATA_SIZE_1_CHN = 128;
+const int DATA_SIZE_1_CHN = 64;
 bool flag;
 @synthesize udpServer;
 @synthesize tcpServer;
@@ -67,10 +67,11 @@ void* initializeInstance(void *THIS){
 {
     if (abl == Nil) {
         flag = false;
+        pepareAblThread = dispatch_queue_create("com.abl.prepare", NULL);
         initializedAblArrays = false;
         abl = (AudioBufferList*) malloc(sizeof(AudioBufferList));
-        byteData = (Byte*) malloc(1024); //should maybe be a different value in the future
-        byteData2 = (Byte*) malloc(1024);
+        byteData = (Byte*) malloc(DATA_SIZE_1_CHN*8); //should maybe be a different value in the future
+        byteData2 = (Byte*) malloc(DATA_SIZE_1_CHN*8);
         
 //        NSURL *furl = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:@"black.jpeg"]];
         NSString *path = [[NSBundle mainBundle] pathForResource:@"music-note" ofType:@"png"];
@@ -117,104 +118,109 @@ void* initializeInstance(void *THIS){
 }
 
 - (void)encodeAudioBufferList:(AudioBufferList *)ablist {
-    //NSMutableData *data = [NSMutableData data];
-    
-//    NSLog(@"Frame data size: %i",ablist->mBuffers[0].mDataByteSize*2);
-    if(streaming == true){
-//        if(mutableData == nil){
-//            mutableData = [NSMutableData data];
-//        } else {
-//            [mutableData setLength:0];
-//        }
-//        
-//        for (UInt32 y = 0; y < ablist->mNumberBuffers; y++){
-//            AudioBuffer ab = ablist->mBuffers[y];
-//            Float32 *frame = (Float32*)ab.mData;
-//            [mutableData appendBytes:frame length:ab.mDataByteSize];
-//        }
-//        
-//        if (udp) {
-//            [udpServer sendToAll:mutableData];
-//        } else {
-//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-//                [tcpServer sendToAll:mutableData];
-//            });
-//        }
+    dispatch_async(pepareAblThread, ^{
         
-//        [udpServer sendToAll:mutableData];
-//        tcpServer.audioDataFlag = 1;
-//        [dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) addope]
-        // return mutableData;
-    } else if (serverStarted && !initializedChannels){
-        initializedChannels = true;
+//        [player addToBufferWithoutTimeStampAudioBufferList:ablist];
         
-        _numChannels = ablist->mNumberBuffers;
-        [_labelChannels setStringValue:[NSString stringWithFormat:@"%@ %i",_labelChannels.stringValue, _numChannels]];
+        //NSMutableData *data = [NSMutableData data];
         
-        channelsInfo = [[NSMutableArray alloc]init];
-        NSLog(@"Numchannels %i", _numChannels);
-        
-        //NSDictionary *dict = [[NSDictionary alloc]init];
-        for(int i = 0; i < _numChannels;i++){
-          //  [dict setValue:[NSString stringWithFormat:@"Channel %i",i+1] forKey:@"name"];
-//            [dict setValue:@"123" forKey:@"name"];
-//            [dict initWithObjectsAndKeys:[NSString stringWithFormat:@"Channel %i",i+1] ?: [NSNull null], @"name", nil];
-            NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[NSString stringWithFormat:@"Channel %i",i+1],@"name", nil];
-            NSDictionary *imgDict = [[NSDictionary alloc] initWithObjectsAndKeys:@"music-note",@"fileName",@"png",@"fileExtension", nil];
-            [dict setObject:imgDict forKey:@"image"];
-            //[NSDictionary        dictionaryWithObject:@"Cannel X" forKey:@"name"];
-//            dict = @{ @"name" :[NSString stringWithFormat:@"Channel %i",i+1]};
-            [channelsInfo addObject:dict];
-            //[dict autorelease];
-        }
-        
-//        clientMixer = [[ClientMixer alloc]initWithAudioController:self.audioController NumberOfChannels:_numChannels];
-//        [self.audioController addOutputReceiver:clientMixer forChannelGroup:channel];
-        NSLog(@"audioController num channels: %lu",(unsigned long)self.audioController.channels.count);
-//        [_audioController addChannels:[NSArray arrayWithObject:clientMixer.player] toChannelGroup:channel];
-        
-        
-        ablArray1 = [[NSMutableArray alloc]init];
-        for (int i = 0; i < _numChannels; i++) {
-            AudioBufferManager *abm = [[AudioBufferManager alloc]init];
-            abm.buffer = AEAllocateAndInitAudioBufferList(self.audioController.audioDescription, DATA_SIZE_1_CHN);
-            [ablArray1 addObject:abm];
-        }
-        ablArray2 = [[NSMutableArray alloc]init];
-        for (int i = 0; i < _numChannels; i++) {
-            AudioBufferManager *abm = [[AudioBufferManager alloc]init];
-            abm.buffer = AEAllocateAndInitAudioBufferList(self.audioController.audioDescription, DATA_SIZE_1_CHN);
-            [ablArray2 addObject:abm];
-        }
-        
-        initializedAblArrays = true;
-        
-        [_sharedCAPlayThroughObjC initTables];
-    } else if(initializedAblArrays){
-        flag = !flag;
-        if (flag) {
-            //Devide the ABL into one stereo ABL per channel
+        //    NSLog(@"Frame data size: %i",ablist->mBuffers[0].mDataByteSize*2);
+        if(streaming == true){
+            //        if(mutableData == nil){
+            //            mutableData = [NSMutableData data];
+            //        } else {
+            //            [mutableData setLength:0];
+            //        }
+            //
+            //        for (UInt32 y = 0; y < ablist->mNumberBuffers; y++){
+            //            AudioBuffer ab = ablist->mBuffers[y];
+            //            Float32 *frame = (Float32*)ab.mData;
+            //            [mutableData appendBytes:frame length:ab.mDataByteSize];
+            //        }
+            //
+            //        if (udp) {
+            //            [udpServer sendToAll:mutableData];
+            //        } else {
+            //            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            //                [tcpServer sendToAll:mutableData];
+            //            });
+            //        }
+            
+            //        [udpServer sendToAll:mutableData];
+            //        tcpServer.audioDataFlag = 1;
+            //        [dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) addope]
+            // return mutableData;
+        } else if (serverStarted && !initializedChannels){
+            initializedChannels = true;
+            
+            _numChannels = ablist->mNumberBuffers;
+            [_labelChannels setStringValue:[NSString stringWithFormat:@"%@ %i",_labelChannels.stringValue, _numChannels]];
+            
+            channelsInfo = [[NSMutableArray alloc]init];
+            NSLog(@"Numchannels %i", _numChannels);
+            
+            //NSDictionary *dict = [[NSDictionary alloc]init];
+            for(int i = 0; i < _numChannels;i++){
+                //  [dict setValue:[NSString stringWithFormat:@"Channel %i",i+1] forKey:@"name"];
+                //            [dict setValue:@"123" forKey:@"name"];
+                //            [dict initWithObjectsAndKeys:[NSString stringWithFormat:@"Channel %i",i+1] ?: [NSNull null], @"name", nil];
+                NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[NSString stringWithFormat:@"Channel %i",i+1],@"name", nil];
+                NSDictionary *imgDict = [[NSDictionary alloc] initWithObjectsAndKeys:@"music-note",@"fileName",@"png",@"fileExtension", nil];
+                [dict setObject:imgDict forKey:@"image"];
+                //[NSDictionary        dictionaryWithObject:@"Cannel X" forKey:@"name"];
+                //            dict = @{ @"name" :[NSString stringWithFormat:@"Channel %i",i+1]};
+                [channelsInfo addObject:dict];
+                //[dict autorelease];
+            }
+            
+            //        clientMixer = [[ClientMixer alloc]initWithAudioController:self.audioController NumberOfChannels:_numChannels];
+            //        [self.audioController addOutputReceiver:clientMixer forChannelGroup:channel];
+            NSLog(@"audioController num channels: %lu",(unsigned long)self.audioController.channels.count);
+            //        [_audioController addChannels:[NSArray arrayWithObject:clientMixer.player] toChannelGroup:channel];
+            
+            
+            ablArray1 = [[NSMutableArray alloc]init];
             for (int i = 0; i < _numChannels; i++) {
-                //ablist->mBuffers[i]
-                ((AudioBufferManager*)[ablArray1 objectAtIndex:i]).buffer->mBuffers[0] = ablist->mBuffers[i];
-                ((AudioBufferManager*)[ablArray1 objectAtIndex:i]).buffer->mBuffers[1] = ablist->mBuffers[i];
+                AudioBufferManager *abm = [[AudioBufferManager alloc]init];
+                abm.buffer = AEAllocateAndInitAudioBufferList(self.audioController.audioDescription, DATA_SIZE_1_CHN);
+                [ablArray1 addObject:abm];
             }
-            for (int i = 0; i < (int)clients.count; i++) {
-                [[clients objectAtIndex:i] mixAudioBufferListArray:ablArray1];
-            }
-//            [clientMixer mixAudioBufferListArray:ablArray1];
-        } else {
+            ablArray2 = [[NSMutableArray alloc]init];
             for (int i = 0; i < _numChannels; i++) {
-                //ablist->mBuffers[i]
-                ((AudioBufferManager*)[ablArray2 objectAtIndex:i]).buffer->mBuffers[0] = ablist->mBuffers[i];
-                ((AudioBufferManager*)[ablArray2 objectAtIndex:i]).buffer->mBuffers[1] = ablist->mBuffers[i];
+                AudioBufferManager *abm = [[AudioBufferManager alloc]init];
+                abm.buffer = AEAllocateAndInitAudioBufferList(self.audioController.audioDescription, DATA_SIZE_1_CHN);
+                [ablArray2 addObject:abm];
             }
-            for (int i = 0; i < (int)clients.count; i++) {
-                [[clients objectAtIndex:i] mixAudioBufferListArray:ablArray2];
+            
+            initializedAblArrays = true;
+            
+            [_sharedCAPlayThroughObjC initTables];
+        } else if(initializedAblArrays){
+            flag = !flag;
+            if (flag) {
+                //Devide the ABL into one stereo ABL per channel
+                for (int i = 0; i < _numChannels; i++) {
+                    //ablist->mBuffers[i]
+                    ((AudioBufferManager*)[ablArray1 objectAtIndex:i]).buffer->mBuffers[0] = ablist->mBuffers[i];
+                    ((AudioBufferManager*)[ablArray1 objectAtIndex:i]).buffer->mBuffers[1] = ablist->mBuffers[i];
+                }
+                for (int i = 0; i < (int)clients.count; i++) {
+                    [[clients objectAtIndex:i] mixAudioBufferListArray:ablArray1];
+                }
+                //            [clientMixer mixAudioBufferListArray:ablArray1];
+            } else {
+                for (int i = 0; i < _numChannels; i++) {
+                    //ablist->mBuffers[i]
+                    ((AudioBufferManager*)[ablArray2 objectAtIndex:i]).buffer->mBuffers[0] = ablist->mBuffers[i];
+                    ((AudioBufferManager*)[ablArray2 objectAtIndex:i]).buffer->mBuffers[1] = ablist->mBuffers[i];
+                }
+                for (int i = 0; i < (int)clients.count; i++) {
+                    [[clients objectAtIndex:i] mixAudioBufferListArray:ablArray2];
+                }
+                //            [clientMixer mixAudioBufferListArray:ablArray2];
             }
-//            [clientMixer mixAudioBufferListArray:ablArray2];
         }
-    }
+    });
 }
 
 -(void)initTables
