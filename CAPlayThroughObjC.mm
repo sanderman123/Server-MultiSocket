@@ -120,7 +120,7 @@ void* initializeInstance(void *THIS){
 }
 
 - (void)encodeAudioBufferList:(AudioBufferList *)ablist {
-    dispatch_async(pepareAblThread, ^{
+    dispatch_sync(pepareAblThread, ^{
         
 //        [player addToBufferWithoutTimeStampAudioBufferList:ablist];
         

@@ -92,7 +92,10 @@
     
     //New client, remeber the uuid and name
     [clients addObject:jsonDictionary];
-    [[CAPlayThroughObjC sharedCAPlayThroughObjC:nil] refreshConnectedClients];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[CAPlayThroughObjC sharedCAPlayThroughObjC:nil] refreshConnectedClients];
+    });
+    
     
     [self initializeClient:address];
 }
