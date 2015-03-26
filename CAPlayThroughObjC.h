@@ -53,6 +53,7 @@
     NSMutableArray *ablArray2;
     
     dispatch_queue_t pepareAblThread;
+    dispatch_queue_t testThread;
 }
 @property (nonatomic,strong) AEAudioController *audioController;
 @property (nonatomic,strong) Server* udpServer;

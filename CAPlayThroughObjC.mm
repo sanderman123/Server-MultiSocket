@@ -14,7 +14,7 @@
 
 static CAPlayThroughObjC* _sharedCAPlayThroughObjC = nil;
 /** The data byte size of 1 channel in the AudioBufferList */
-const int DATA_SIZE_1_CHN = 64;
+const int DATA_SIZE_1_CHN = 32;
 bool flag;
 @synthesize udpServer;
 @synthesize tcpServer;
@@ -67,7 +67,8 @@ void* initializeInstance(void *THIS){
 {
     if (abl == Nil) {
         flag = false;
-        pepareAblThread = dispatch_queue_create("com.abl.prepare", NULL);
+        pepareAblThread = dispatch_queue_create("CAPlaythrough.prepareABL", NULL);
+        testThread = dispatch_queue_create("CAPlaythrough.testThread", NULL);
         initializedAblArrays = false;
         abl = (AudioBufferList*) malloc(sizeof(AudioBufferList));
         byteData = (Byte*) malloc(DATA_SIZE_1_CHN*8); //should maybe be a different value in the future
@@ -99,8 +100,8 @@ void* initializeInstance(void *THIS){
         
         self.audioController = [[AEAudioController alloc] initWithAudioDescription:[AEAudioController nonInterleavedFloatStereoAudioDescription]];
 //        self.audioController.preferredBufferDuration = 0.0029;
-        self.audioController.preferredBufferDuration = 0.00145;
-//        self.audioController.preferredBufferDuration = 0.000725;
+//        self.audioController.preferredBufferDuration = 0.00145;
+        self.audioController.preferredBufferDuration = 0.000725;
         
 //        //Add channels and players
         player = [[MyAudioPlayer alloc] init];
@@ -473,7 +474,6 @@ void* initializeInstance(void *THIS){
         
         if(colNumber == 2){
             NSImage *image = [[NSImage alloc]init];
-            image = [[NSImage alloc]init];
             
             NSOpenPanel *panel = [NSOpenPanel openPanel];
             [panel setCanChooseFiles:YES];
@@ -505,7 +505,7 @@ void* initializeInstance(void *THIS){
                 [udpServer sendUpdateToClients];
 //                tcpServer.audioDataFlag = 0;
 //                [tcpServer sendChannelImageToClients:fileName format:fileExtension index:rowNumber];
-                [channelsTableView reloadData];
+                    [channelsTableView reloadData];
             }
         }
     }

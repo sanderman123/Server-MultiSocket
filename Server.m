@@ -71,7 +71,7 @@
     [jsonDictionary setObject:streamSocket forKey:@"streamSocket"];
     
     dispatch_queue_t updateQueue = dispatch_queue_create("com.mydomain.app.updatequeue", NULL);
-    GCDAsyncUdpSocket *updateSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:streamQueue /*Queuedispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)*/];
+    GCDAsyncUdpSocket *updateSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:updateQueue /*Queuedispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)*/];
     
     //Open a unique port
     error = [NSError alloc];

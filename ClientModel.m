@@ -130,8 +130,6 @@ static void receiverCallback(__unsafe_unretained ClientModel *THIS,
                     mutableData1 = [NSMutableData data];
                 } else {
                     [mutableData1 setLength:0];
-                    mutableData1 = nil;
-                    mutableData1 = [NSMutableData data];
                 }
                 
                 for (UInt32 y = 0; y < audio->mNumberBuffers; y++){
@@ -139,15 +137,20 @@ static void receiverCallback(__unsafe_unretained ClientModel *THIS,
                     if (ab.mData != nil) {
                         [mutableData1 appendBytes:ab.mData length:ab.mDataByteSize];
                     } else {
-                        NSLog(@"Error: ab is nil");
+                        NSLog(@"Error: ab L is nil, y = %i",y);
+                        return;
                     }
                     
                     //                            Float32 *frame = (Float32*)ab.mData;
                     //                            [mutableData1 appendBytes:frame length:ab.mDataByteSize];
                 }
                 
-                // Send audio to socket
-                [_streamSocket sendData:mutableData1 toAddress:_audioAddress withTimeout:-1 tag:222];
+                if (mutableData1.length > 128) {
+                    // Send audio to socket
+                    [_streamSocket sendData:mutableData1 toAddress:_audioAddress withTimeout:-1 tag:222];
+                } else {
+                    NSLog(@"Error: mutableData1 length = 0");
+                }
                 
                 //NSLog(@"Audio Sent");
             } else {
@@ -155,18 +158,22 @@ static void receiverCallback(__unsafe_unretained ClientModel *THIS,
                     mutableData2 = [NSMutableData data];
                 } else {
                     [mutableData2 setLength:0];
-                    mutableData2 = nil;
-                    mutableData2 = [NSMutableData data];
                 }
                 
                 AudioBuffer ab1 = audio->mBuffers[0];
                 if (ab1.mData != nil) {
                     [mutableData2 appendBytes:ab1.mData length:ab1.mDataByteSize];
+                } else {
+                    NSLog(@"Error: ab R0 is nil");
+                    return;
                 }
                 
                 AudioBuffer ab2 = audio->mBuffers[1];
                 if (ab2.mData != nil) {
                     [mutableData2 appendBytes:ab2.mData length:ab2.mDataByteSize];
+                } else {
+                    NSLog(@"Error: ab R1 is nil");
+                    return;
                 }
                 
                 
@@ -182,8 +189,12 @@ static void receiverCallback(__unsafe_unretained ClientModel *THIS,
                 //                        [mutableData2 appendBytes:frame length:ab.mDataByteSize];
                 //            }
                 
-                // Send audio to socket
-                [_streamSocket sendData:mutableData2 toAddress:_audioAddress withTimeout:-1 tag:223];
+                if (mutableData2.length > 128) {
+                    // Send audio to socket
+                    [_streamSocket sendData:mutableData2 toAddress:_audioAddress withTimeout:-1 tag:223];
+                } else {
+                    NSLog(@"Error: mutableData2 length = 0");
+                }
             }
         } else {
             NSLog(@"Audio buffer list empty!");

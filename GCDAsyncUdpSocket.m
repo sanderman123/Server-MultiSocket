@@ -3584,7 +3584,7 @@ enum GCDAsyncUdpSocketConfig
 {
 	LogTrace();
 	
-	if ([data length] == 0)
+	if ([data length] == 0 || data == nil)
 	{
 		LogWarn(@"Ignoring attempt to send nil/empty data.");
 		return;
