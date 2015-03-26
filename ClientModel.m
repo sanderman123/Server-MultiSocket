@@ -22,7 +22,7 @@
         //Init client channel group
         numChannels = n;
         NSLog(@"Number of channels: %i",numChannels);
-
+        
         prepareAndSendDataThread = dispatch_queue_create("com.ClientModel.DataPrepareSend", NULL);
         
         self.audioPlayers = [[NSMutableArray alloc]init];
@@ -36,11 +36,11 @@
             MyAudioPlayer *player = [[MyAudioPlayer alloc]init];
             AEChannelGroupRef channel = [self.audioController createChannelGroupWithinChannelGroup:mainChannel];
             [self.audioController addChannels:[NSArray arrayWithObject:player] toChannelGroup:channel];
-//            if (i == 0) {
-//                [audioController setPan:0.9 forChannelGroup:channel];
-//            [self addReverbToChannelGroup:channel];
+            //            if (i == 0) {
+            //                [audioController setPan:0.9 forChannelGroup:channel];
+            //            [self addReverbToChannelGroup:channel];
             
-//            }
+            //            }
             
             [self.audioController setVolume:1.0 forChannelGroup:channel];
             [self.audioPlayers addObject:player];
@@ -69,16 +69,16 @@
     }
 }
 
--(void)addReverbToChannelGroup:(AEChannelGroupRef) channel {
+-(void)addReverbToChannelGroup:(AEChannelGroupRef) channel ReverbValue:(float)reverbValue{
     AudioComponentDescription component
     = AEAudioComponentDescriptionMake(kAudioUnitManufacturer_Apple,
                                       kAudioUnitType_Effect,
                                       kAudioUnitSubType_MatrixReverb);
     NSError *error = NULL;
     AEAudioUnitFilter *reverb = [[AEAudioUnitFilter alloc]
-                   initWithComponentDescription:component
-                   audioController:_audioController
-                   error:&error];
+                                 initWithComponentDescription:component
+                                 audioController:_audioController
+                                 error:&error];
     if ( !reverb ) {
         // Report error
         NSLog(@"Error initializing reverb: %@",error.localizedDescription);
@@ -88,10 +88,29 @@
                           kReverbParam_DryWetMix,
                           kAudioUnitScope_Global,
                           0,
-                          100.f,
+                          reverbValue,
                           0);
     
     [self.audioController addFilter:reverb toChannelGroup:channel];
+}
+
+-(void)updateReverbValue:(float)reverbValue forChannelGroup:(AEChannelGroupRef)channel {
+    NSArray *filters = [self.audioController filtersForChannelGroup:channel];
+    if (filters.count == 0 && reverbValue > 0.f) {
+        [self addReverbToChannelGroup:channel ReverbValue:reverbValue];
+    } else if (filters.count > 0 ){
+        AEAudioUnitFilter *reverbFilter = [filters objectAtIndex:0];
+        if (reverbValue <= 0.f) {
+            [self.audioController removeFilter:reverbFilter fromChannelGroup:channel];
+        } else {
+            AudioUnitSetParameter(reverbFilter.audioUnit,
+                                  kReverbParam_DryWetMix,
+                                  kAudioUnitScope_Global,
+                                  0,
+                                  reverbValue,
+                                  0);
+        }
+    }
 }
 
 
@@ -145,12 +164,8 @@ static void receiverCallback(__unsafe_unretained ClientModel *THIS,
                     //                            [mutableData1 appendBytes:frame length:ab.mDataByteSize];
                 }
                 
-                if (mutableData1.length > 128) {
-                    // Send audio to socket
-                    [_streamSocket sendData:mutableData1 toAddress:_audioAddress withTimeout:-1 tag:222];
-                } else {
-                    NSLog(@"Error: mutableData1 length = 0");
-                }
+                // Send audio to socket
+                [_streamSocket sendData:mutableData1 toAddress:_audioAddress withTimeout:-1 tag:222];
                 
                 //NSLog(@"Audio Sent");
             } else {
@@ -189,12 +204,8 @@ static void receiverCallback(__unsafe_unretained ClientModel *THIS,
                 //                        [mutableData2 appendBytes:frame length:ab.mDataByteSize];
                 //            }
                 
-                if (mutableData2.length > 128) {
-                    // Send audio to socket
-                    [_streamSocket sendData:mutableData2 toAddress:_audioAddress withTimeout:-1 tag:223];
-                } else {
-                    NSLog(@"Error: mutableData2 length = 0");
-                }
+                // Send audio to socket
+                [_streamSocket sendData:mutableData2 toAddress:_audioAddress withTimeout:-1 tag:223];
             }
         } else {
             NSLog(@"Audio buffer list empty!");
@@ -205,10 +216,11 @@ static void receiverCallback(__unsafe_unretained ClientModel *THIS,
 -(void)updateChannelSettings:(NSDictionary *)settingsDict{
     int chan = [[settingsDict objectForKey:@"channel"] intValue] - 1;
     AEChannelGroupRef cgr = ((MyChannelGroup*)[self.channelGroups objectAtIndex:chan]).aecgRef;
-
+    
     [self.audioController setVolume:[[settingsDict objectForKey:@"volume"] floatValue] forChannelGroup:cgr];
     [self.audioController setPan: [[settingsDict objectForKey:@"pan"] floatValue] forChannelGroup:cgr];
     [self.audioController setMuted: [[settingsDict objectForKey:@"muted"] boolValue] forChannelGroup:cgr];
+    [self updateReverbValue:[[settingsDict objectForKey:@"reverb"] floatValue] forChannelGroup:cgr];
 }
 
 
