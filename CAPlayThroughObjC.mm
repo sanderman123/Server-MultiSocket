@@ -14,7 +14,7 @@
 
 static CAPlayThroughObjC* _sharedCAPlayThroughObjC = nil;
 /** The data byte size of 1 channel in the AudioBufferList */
-const int DATA_SIZE_1_CHN = 32;
+const int DATA_SIZE_1_CHN = 64;
 bool flag;
 @synthesize udpServer;
 @synthesize tcpServer;
@@ -101,7 +101,8 @@ void* initializeInstance(void *THIS){
         self.audioController = [[AEAudioController alloc] initWithAudioDescription:[AEAudioController nonInterleavedFloatStereoAudioDescription]];
 //        self.audioController.preferredBufferDuration = 0.0029;
 //        self.audioController.preferredBufferDuration = 0.00145;
-        self.audioController.preferredBufferDuration = 0.000725;
+//        self.audioController.preferredBufferDuration = 0.000725;
+//        self.audioController.preferredBufferDuration = 0.0003625;
         
 //        //Add channels and players
         player = [[MyAudioPlayer alloc] init];

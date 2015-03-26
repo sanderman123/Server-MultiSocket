@@ -111,7 +111,7 @@
     for (int i = 0; i < clientCount; i++) {
         [[[clients objectAtIndex:i] objectForKey:@"updateSocket"] sendData:data toAddress:[[clients objectAtIndex:i] objectForKey:@"updateAddress"] withTimeout:100 tag:9998];
     }
-    NSLog(@"Update sent");
+//    NSLog(@"Update sent");
 }
 //won't used anymore
 -(void)sendChannelImageToClients:(NSString*)name format:(NSString*) format index:(int)index{
@@ -162,7 +162,7 @@
 
 - (void) udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
     
-    NSLog(@"Received data with length: %lu", (unsigned long)data.length);
+//    NSLog(@"Received data with length: %lu", (unsigned long)data.length);
     NSError *e = nil;
     NSMutableDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData: data options: NSJSONReadingMutableContainers error: &e];
     

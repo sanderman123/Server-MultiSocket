@@ -124,7 +124,7 @@ void	AudioDevice::Init(AudioDeviceID devid, bool isInput)
 //
     
 //    SetBufferSize(128);
-    SetBufferSize(32);
+    SetBufferSize(64);
 
     
 //    printf("mid: %d / size %d / safety %d / latency %d\n",(unsigned int)mID,(unsigned int)mBufferSizeFrames,(unsigned int)mSafetyOffset, latency   );
@@ -145,6 +145,7 @@ void	AudioDevice::SetBufferSize(UInt32 size)
     verify_noerr(AudioObjectSetPropertyData(mID, &theAddress, 0, NULL, propsize, &size));
     
     verify_noerr(AudioObjectGetPropertyData(mID, &theAddress, 0, NULL, &propsize, &mBufferSizeFrames));
+    printf("Buffer size: %i - ", mBufferSizeFrames);
 }
 
 int		AudioDevice::CountChannels()
