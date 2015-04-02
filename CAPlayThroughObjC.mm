@@ -14,7 +14,7 @@
 
 static CAPlayThroughObjC* _sharedCAPlayThroughObjC = nil;
 /** The data byte size of 1 channel in the AudioBufferList */
-const int DATA_SIZE_1_CHN = 64;
+const int DATA_SIZE_1_CHN = 128;
 bool flag;
 @synthesize udpServer;
 @synthesize tcpServer;
@@ -75,7 +75,9 @@ void* initializeInstance(void *THIS){
         byteData2 = (Byte*) malloc(DATA_SIZE_1_CHN*8);
         
 //        NSURL *furl = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:@"black.jpeg"]];
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"music-note" ofType:@"png"];
+        NSString *folderPath = [NSString stringWithFormat:@"%@/images", [[NSBundle mainBundle] bundlePath]];
+        NSString *path = [NSString stringWithFormat:@"%@/singer1.png",folderPath];
+//        NSString *path = [[NSBundle mainBundle] pathForResource:@"music-note" ofType:@"png"];
         NSURL *furl = [NSURL fileURLWithPath: path];
         defaultImage = [[NSImage alloc] init];
         [defaultImage initWithContentsOfURL:furl];

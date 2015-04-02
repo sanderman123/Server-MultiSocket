@@ -69,6 +69,21 @@
 		C59D9A831AB837640005180F /* ClientModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C59D9A811AB837640005180F /* ClientModel.m */; };
 		C59D9A871AB84C9D0005180F /* AudioBufferManager.h in Headers */ = {isa = PBXBuildFile; fileRef = C59D9A851AB84C9D0005180F /* AudioBufferManager.h */; };
 		C59D9A881AB84C9D0005180F /* AudioBufferManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C59D9A861AB84C9D0005180F /* AudioBufferManager.m */; };
+		C5C4A5EC1ACD3A8B00D80F9F /* bassguitar1.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5DD1ACD3A8B00D80F9F /* bassguitar1.png */; };
+		C5C4A5ED1ACD3A8B00D80F9F /* drum1.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5DE1ACD3A8B00D80F9F /* drum1.png */; };
+		C5C4A5EE1ACD3A8B00D80F9F /* drum2.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5DF1ACD3A8B00D80F9F /* drum2.png */; };
+		C5C4A5EF1ACD3A8B00D80F9F /* electricguitar1.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5E01ACD3A8B00D80F9F /* electricguitar1.png */; };
+		C5C4A5F01ACD3A8B00D80F9F /* electricguitar2.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5E11ACD3A8B00D80F9F /* electricguitar2.png */; };
+		C5C4A5F11ACD3A8B00D80F9F /* electricguitar3.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5E21ACD3A8B00D80F9F /* electricguitar3.png */; };
+		C5C4A5F21ACD3A8B00D80F9F /* guitar1.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5E31ACD3A8B00D80F9F /* guitar1.png */; };
+		C5C4A5F31ACD3A8B00D80F9F /* piano1.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5E41ACD3A8B00D80F9F /* piano1.png */; };
+		C5C4A5F41ACD3A8B00D80F9F /* singer.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5E51ACD3A8B00D80F9F /* singer.png */; };
+		C5C4A5F51ACD3A8B00D80F9F /* singer1.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5E61ACD3A8B00D80F9F /* singer1.png */; };
+		C5C4A5F61ACD3A8B00D80F9F /* singer2.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5E71ACD3A8B00D80F9F /* singer2.png */; };
+		C5C4A5F71ACD3A8B00D80F9F /* singer3.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5E81ACD3A8B00D80F9F /* singer3.png */; };
+		C5C4A5F81ACD3A8B00D80F9F /* singer4.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5E91ACD3A8B00D80F9F /* singer4.png */; };
+		C5C4A5F91ACD3A8B00D80F9F /* singer5.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5EA1ACD3A8B00D80F9F /* singer5.png */; };
+		C5C4A5FA1ACD3A8B00D80F9F /* westernguitar1.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5EB1ACD3A8B00D80F9F /* westernguitar1.png */; };
 		E732FEDC1A8E6A2500FA4C94 /* BonjourServer.h in Headers */ = {isa = PBXBuildFile; fileRef = E732FEDA1A8E6A2500FA4C94 /* BonjourServer.h */; };
 		E732FEDD1A8E6A2500FA4C94 /* BonjourServer.m in Sources */ = {isa = PBXBuildFile; fileRef = E732FEDB1A8E6A2500FA4C94 /* BonjourServer.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		E7B258861A6A292200CDD0E5 /* CAPlayThroughObjC.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B258851A6A292200CDD0E5 /* CAPlayThroughObjC.mm */; };
@@ -158,6 +173,21 @@
 		C59D9A811AB837640005180F /* ClientModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClientModel.m; sourceTree = "<group>"; };
 		C59D9A851AB84C9D0005180F /* AudioBufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioBufferManager.h; sourceTree = "<group>"; };
 		C59D9A861AB84C9D0005180F /* AudioBufferManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioBufferManager.m; sourceTree = "<group>"; };
+		C5C4A5DD1ACD3A8B00D80F9F /* bassguitar1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bassguitar1.png; path = images/bassguitar1.png; sourceTree = "<group>"; };
+		C5C4A5DE1ACD3A8B00D80F9F /* drum1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = drum1.png; path = images/drum1.png; sourceTree = "<group>"; };
+		C5C4A5DF1ACD3A8B00D80F9F /* drum2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = drum2.png; path = images/drum2.png; sourceTree = "<group>"; };
+		C5C4A5E01ACD3A8B00D80F9F /* electricguitar1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = electricguitar1.png; path = images/electricguitar1.png; sourceTree = "<group>"; };
+		C5C4A5E11ACD3A8B00D80F9F /* electricguitar2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = electricguitar2.png; path = images/electricguitar2.png; sourceTree = "<group>"; };
+		C5C4A5E21ACD3A8B00D80F9F /* electricguitar3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = electricguitar3.png; path = images/electricguitar3.png; sourceTree = "<group>"; };
+		C5C4A5E31ACD3A8B00D80F9F /* guitar1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = guitar1.png; path = images/guitar1.png; sourceTree = "<group>"; };
+		C5C4A5E41ACD3A8B00D80F9F /* piano1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = piano1.png; path = images/piano1.png; sourceTree = "<group>"; };
+		C5C4A5E51ACD3A8B00D80F9F /* singer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = singer.png; path = images/singer.png; sourceTree = "<group>"; };
+		C5C4A5E61ACD3A8B00D80F9F /* singer1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = singer1.png; path = images/singer1.png; sourceTree = "<group>"; };
+		C5C4A5E71ACD3A8B00D80F9F /* singer2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = singer2.png; path = images/singer2.png; sourceTree = "<group>"; };
+		C5C4A5E81ACD3A8B00D80F9F /* singer3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = singer3.png; path = images/singer3.png; sourceTree = "<group>"; };
+		C5C4A5E91ACD3A8B00D80F9F /* singer4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = singer4.png; path = images/singer4.png; sourceTree = "<group>"; };
+		C5C4A5EA1ACD3A8B00D80F9F /* singer5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = singer5.png; path = images/singer5.png; sourceTree = "<group>"; };
+		C5C4A5EB1ACD3A8B00D80F9F /* westernguitar1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = westernguitar1.png; path = images/westernguitar1.png; sourceTree = "<group>"; };
 		E732FEDA1A8E6A2500FA4C94 /* BonjourServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BonjourServer.h; sourceTree = "<group>"; };
 		E732FEDB1A8E6A2500FA4C94 /* BonjourServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BonjourServer.m; sourceTree = "<group>"; };
 		E7B258851A6A292200CDD0E5 /* CAPlayThroughObjC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CAPlayThroughObjC.mm; sourceTree = "<group>"; };
@@ -288,6 +318,21 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C5C4A5DD1ACD3A8B00D80F9F /* bassguitar1.png */,
+				C5C4A5DE1ACD3A8B00D80F9F /* drum1.png */,
+				C5C4A5DF1ACD3A8B00D80F9F /* drum2.png */,
+				C5C4A5E01ACD3A8B00D80F9F /* electricguitar1.png */,
+				C5C4A5E11ACD3A8B00D80F9F /* electricguitar2.png */,
+				C5C4A5E21ACD3A8B00D80F9F /* electricguitar3.png */,
+				C5C4A5E31ACD3A8B00D80F9F /* guitar1.png */,
+				C5C4A5E41ACD3A8B00D80F9F /* piano1.png */,
+				C5C4A5E51ACD3A8B00D80F9F /* singer.png */,
+				C5C4A5E61ACD3A8B00D80F9F /* singer1.png */,
+				C5C4A5E71ACD3A8B00D80F9F /* singer2.png */,
+				C5C4A5E81ACD3A8B00D80F9F /* singer3.png */,
+				C5C4A5E91ACD3A8B00D80F9F /* singer4.png */,
+				C5C4A5EA1ACD3A8B00D80F9F /* singer5.png */,
+				C5C4A5EB1ACD3A8B00D80F9F /* westernguitar1.png */,
 				C577896F1A80D6B400E36B5A /* black.jpeg */,
 				C577896D1A80D44800E36B5A /* music-note.png */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -479,10 +524,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5C4A5F41ACD3A8B00D80F9F /* singer.png in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				C5C4A5FA1ACD3A8B00D80F9F /* westernguitar1.png in Resources */,
+				C5C4A5ED1ACD3A8B00D80F9F /* drum1.png in Resources */,
+				C5C4A5F91ACD3A8B00D80F9F /* singer5.png in Resources */,
 				C577896E1A80D44800E36B5A /* music-note.png in Resources */,
 				2B9BE3BF17E7E5C200927DE6 /* MainMenu.xib in Resources */,
+				C5C4A5F11ACD3A8B00D80F9F /* electricguitar3.png in Resources */,
+				C5C4A5F61ACD3A8B00D80F9F /* singer2.png in Resources */,
 				C57789701A80D6B400E36B5A /* black.jpeg in Resources */,
+				C5C4A5EC1ACD3A8B00D80F9F /* bassguitar1.png in Resources */,
+				C5C4A5F71ACD3A8B00D80F9F /* singer3.png in Resources */,
+				C5C4A5F21ACD3A8B00D80F9F /* guitar1.png in Resources */,
+				C5C4A5EF1ACD3A8B00D80F9F /* electricguitar1.png in Resources */,
+				C5C4A5F31ACD3A8B00D80F9F /* piano1.png in Resources */,
+				C5C4A5F51ACD3A8B00D80F9F /* singer1.png in Resources */,
+				C5C4A5F81ACD3A8B00D80F9F /* singer4.png in Resources */,
+				C5C4A5F01ACD3A8B00D80F9F /* electricguitar2.png in Resources */,
+				C5C4A5EE1ACD3A8B00D80F9F /* drum2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
