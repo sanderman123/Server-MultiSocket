@@ -51,6 +51,11 @@
 		C50FB14A1A6A9B1700E65DE0 /* Server.m in Sources */ = {isa = PBXBuildFile; fileRef = C50FB1461A6A9B1700E65DE0 /* Server.m */; };
 		C54ABB701ABC242A00BAB6C0 /* MyChannelGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = C54ABB6E1ABC242A00BAB6C0 /* MyChannelGroup.h */; };
 		C54ABB711ABC242A00BAB6C0 /* MyChannelGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = C54ABB6F1ABC242A00BAB6C0 /* MyChannelGroup.m */; };
+		C55205931AD4E041005E9BE5 /* libSuperpoweredAudio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C552057C1AD4E041005E9BE5 /* libSuperpoweredAudio.a */; };
+		C55205941AD4E041005E9BE5 /* Superpowered3BandEQ.h in Headers */ = {isa = PBXBuildFile; fileRef = C552057D1AD4E041005E9BE5 /* Superpowered3BandEQ.h */; };
+		C552059F1AD4E041005E9BE5 /* SuperpoweredFX.h in Headers */ = {isa = PBXBuildFile; fileRef = C55205881AD4E041005E9BE5 /* SuperpoweredFX.h */; };
+		C55205AD1AD4E6E4005E9BE5 /* ChannelEqualizer.h in Headers */ = {isa = PBXBuildFile; fileRef = C55205AB1AD4E6E4005E9BE5 /* ChannelEqualizer.h */; };
+		C55205AE1AD4E6E4005E9BE5 /* ChannelEqualizer.mm in Sources */ = {isa = PBXBuildFile; fileRef = C55205AC1AD4E6E4005E9BE5 /* ChannelEqualizer.mm */; };
 		C5592F501A886064003E3552 /* TCPServer.h in Headers */ = {isa = PBXBuildFile; fileRef = C5592F4E1A886064003E3552 /* TCPServer.h */; };
 		C5592F511A886064003E3552 /* TCPServer.m in Sources */ = {isa = PBXBuildFile; fileRef = C5592F4F1A886064003E3552 /* TCPServer.m */; };
 		C5592F541A886081003E3552 /* GCDAsyncSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = C5592F521A886081003E3552 /* GCDAsyncSocket.h */; };
@@ -66,7 +71,7 @@
 		C59D9A7B1AB7E3B80005180F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C59D9A7A1AB7E3B80005180F /* QuartzCore.framework */; };
 		C59D9A7D1AB7E4030005180F /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C59D9A7C1AB7E4030005180F /* Accelerate.framework */; };
 		C59D9A821AB837640005180F /* ClientModel.h in Headers */ = {isa = PBXBuildFile; fileRef = C59D9A801AB837640005180F /* ClientModel.h */; };
-		C59D9A831AB837640005180F /* ClientModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C59D9A811AB837640005180F /* ClientModel.m */; };
+		C59D9A831AB837640005180F /* ClientModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = C59D9A811AB837640005180F /* ClientModel.mm */; };
 		C59D9A871AB84C9D0005180F /* AudioBufferManager.h in Headers */ = {isa = PBXBuildFile; fileRef = C59D9A851AB84C9D0005180F /* AudioBufferManager.h */; };
 		C59D9A881AB84C9D0005180F /* AudioBufferManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C59D9A861AB84C9D0005180F /* AudioBufferManager.m */; };
 		C5C4A5EC1ACD3A8B00D80F9F /* bassguitar1.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5DD1ACD3A8B00D80F9F /* bassguitar1.png */; };
@@ -155,6 +160,11 @@
 		C50FB1461A6A9B1700E65DE0 /* Server.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Server.m; sourceTree = "<group>"; };
 		C54ABB6E1ABC242A00BAB6C0 /* MyChannelGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyChannelGroup.h; sourceTree = "<group>"; };
 		C54ABB6F1ABC242A00BAB6C0 /* MyChannelGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyChannelGroup.m; sourceTree = "<group>"; };
+		C552057C1AD4E041005E9BE5 /* libSuperpoweredAudio.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSuperpoweredAudio.a; sourceTree = "<group>"; };
+		C552057D1AD4E041005E9BE5 /* Superpowered3BandEQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Superpowered3BandEQ.h; sourceTree = "<group>"; };
+		C55205881AD4E041005E9BE5 /* SuperpoweredFX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuperpoweredFX.h; sourceTree = "<group>"; };
+		C55205AB1AD4E6E4005E9BE5 /* ChannelEqualizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelEqualizer.h; sourceTree = "<group>"; };
+		C55205AC1AD4E6E4005E9BE5 /* ChannelEqualizer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ChannelEqualizer.mm; sourceTree = "<group>"; };
 		C5592F4E1A886064003E3552 /* TCPServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCPServer.h; sourceTree = "<group>"; };
 		C5592F4F1A886064003E3552 /* TCPServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCPServer.m; sourceTree = "<group>"; };
 		C5592F521A886081003E3552 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
@@ -170,7 +180,7 @@
 		C59D9A7A1AB7E3B80005180F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		C59D9A7C1AB7E4030005180F /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		C59D9A801AB837640005180F /* ClientModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClientModel.h; sourceTree = "<group>"; };
-		C59D9A811AB837640005180F /* ClientModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClientModel.m; sourceTree = "<group>"; };
+		C59D9A811AB837640005180F /* ClientModel.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ClientModel.mm; sourceTree = "<group>"; };
 		C59D9A851AB84C9D0005180F /* AudioBufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioBufferManager.h; sourceTree = "<group>"; };
 		C59D9A861AB84C9D0005180F /* AudioBufferManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioBufferManager.m; sourceTree = "<group>"; };
 		C5C4A5DD1ACD3A8B00D80F9F /* bassguitar1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bassguitar1.png; path = images/bassguitar1.png; sourceTree = "<group>"; };
@@ -214,6 +224,7 @@
 				C59D9A7D1AB7E4030005180F /* Accelerate.framework in Frameworks */,
 				C59D9A7B1AB7E3B80005180F /* QuartzCore.framework in Frameworks */,
 				C59D9A751AB7E3020005180F /* libTheAmazingAudioEngine OS X.a in Frameworks */,
+				C55205931AD4E041005E9BE5 /* libSuperpoweredAudio.a in Frameworks */,
 				C5592F5A1A886C90003E3552 /* Security.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				8B9E523A0687AE9C00738FA5 /* AudioToolbox.framework in Frameworks */,
@@ -254,9 +265,11 @@
 				C50FB1451A6A9B1700E65DE0 /* Server.h */,
 				C50FB1461A6A9B1700E65DE0 /* Server.m */,
 				C59D9A801AB837640005180F /* ClientModel.h */,
-				C59D9A811AB837640005180F /* ClientModel.m */,
+				C59D9A811AB837640005180F /* ClientModel.mm */,
 				C54ABB6E1ABC242A00BAB6C0 /* MyChannelGroup.h */,
 				C54ABB6F1ABC242A00BAB6C0 /* MyChannelGroup.m */,
+				C55205AB1AD4E6E4005E9BE5 /* ChannelEqualizer.h */,
+				C55205AC1AD4E6E4005E9BE5 /* ChannelEqualizer.mm */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -297,6 +310,7 @@
 				C59D9A771AB7E37F0005180F /* TPCircularBuffer+AudioBufferList.c */,
 				C59D9A4F1AB7D85B0005180F /* TheAmazingAudioEngine.xcodeproj */,
 				2BD33B6B17E7E7640057C926 /* ReadMe.txt */,
+				C552057B1AD4E041005E9BE5 /* Superpowered */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				2B658EFF17E7E0FD00E2ADDE /* PublicUtility */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -370,6 +384,16 @@
 			path = PublicUtility;
 			sourceTree = "<group>";
 		};
+		C552057B1AD4E041005E9BE5 /* Superpowered */ = {
+			isa = PBXGroup;
+			children = (
+				C552057C1AD4E041005E9BE5 /* libSuperpoweredAudio.a */,
+				C552057D1AD4E041005E9BE5 /* Superpowered3BandEQ.h */,
+				C55205881AD4E041005E9BE5 /* SuperpoweredFX.h */,
+			);
+			path = Superpowered;
+			sourceTree = "<group>";
+		};
 		C59D9A501AB7D85B0005180F /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -404,9 +428,11 @@
 				E7B2588B1A6A2D1900CDD0E5 /* CAPlayThroughObjCinterface.h in Headers */,
 				C5592F541A886081003E3552 /* GCDAsyncSocket.h in Headers */,
 				C59D9A5A1AB7D9C20005180F /* MyAudioPlayer.h in Headers */,
+				C552059F1AD4E041005E9BE5 /* SuperpoweredFX.h in Headers */,
 				C5592F501A886064003E3552 /* TCPServer.h in Headers */,
 				8B9E54A30687B3BC00738FA5 /* AudioDeviceList.h in Headers */,
 				C59D9A821AB837640005180F /* ClientModel.h in Headers */,
+				C55205AD1AD4E6E4005E9BE5 /* ChannelEqualizer.h in Headers */,
 				8B9E54B30687B59800738FA5 /* CAPlayThroughController.h in Headers */,
 				E732FEDC1A8E6A2500FA4C94 /* BonjourServer.h in Headers */,
 				C50FB1411A6A9B0A00E65DE0 /* GCDAsyncUdpSocket.h in Headers */,
@@ -415,6 +441,7 @@
 				C54ABB701ABC242A00BAB6C0 /* MyChannelGroup.h in Headers */,
 				8B9E54DF0687B72500738FA5 /* AudioDevice.h in Headers */,
 				E7B258891A6A29E400CDD0E5 /* CAPlayThroughObjC.h in Headers */,
+				C55205941AD4E041005E9BE5 /* Superpowered3BandEQ.h in Headers */,
 				C59D9A871AB84C9D0005180F /* AudioBufferManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -579,9 +606,10 @@
 				8B9E54B40687B59800738FA5 /* CAPlayThroughController.mm in Sources */,
 				C50FB1491A6A9B1700E65DE0 /* Server.m in Sources */,
 				8B9E54D00687B6EB00738FA5 /* CAPlayThrough.mm in Sources */,
-				C59D9A831AB837640005180F /* ClientModel.m in Sources */,
+				C59D9A831AB837640005180F /* ClientModel.mm in Sources */,
 				8B9E54DE0687B72500738FA5 /* AudioDevice.cpp in Sources */,
 				2B658F0A17E7E0FD00E2ADDE /* CARingBuffer.cpp in Sources */,
+				C55205AE1AD4E6E4005E9BE5 /* ChannelEqualizer.mm in Sources */,
 				2B658F0E17E7E0FD00E2ADDE /* CAStreamBasicDescription.cpp in Sources */,
 				C59D9A5B1AB7D9C20005180F /* MyAudioPlayer.mm in Sources */,
 				C59D9A791AB7E37F0005180F /* TPCircularBuffer+AudioBufferList.c in Sources */,
@@ -737,6 +765,10 @@
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Superpowered",
+				);
 				PRODUCT_NAME = CAPlayThrough;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -755,6 +787,10 @@
 				COPY_PHASE_STRIP = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Superpowered",
+				);
 				PRODUCT_NAME = CAPlayThrough;
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -772,6 +808,10 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Superpowered",
+				);
 				PRODUCT_NAME = CAPlayThrough;
 				WARNING_CFLAGS = (
 					"-Wmost",

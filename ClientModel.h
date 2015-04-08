@@ -20,6 +20,8 @@
     dispatch_queue_t prepareAndSendDataThread;
     NSData *dataL;
     NSData *dataR;
+    NSMutableArray *eqArray;
+    NSMutableArray *reverbArray;
 }
 //@property (nonatomic,strong) NSMutableData *mutableData1;
 //@property (nonatomic,strong) NSMutableData *mutableData2;
