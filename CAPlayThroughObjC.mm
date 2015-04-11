@@ -14,7 +14,7 @@
 
 static CAPlayThroughObjC* _sharedCAPlayThroughObjC = nil;
 /** The data byte size of 1 channel in the AudioBufferList */
-const int DATA_SIZE_1_CHN = 128;
+const int DATA_SIZE_1_CHN = 64;
 bool flag;
 @synthesize udpServer;
 @synthesize tcpServer;
