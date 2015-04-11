@@ -28,8 +28,13 @@
 -(bool)setBand:(int)bandIndex GainValue:(float)gain{
     assert(0 <= bandIndex && bandIndex <= 2);
     assert(0.0f <= gain && gain <= 2.0f);
-    self.eqLeft->bands[bandIndex] = gain;
-    self.eqRight->bands[bandIndex] = gain;
+    if (gain > 1.0f && bandIndex == 0) {
+        self.eqLeft->bands[bandIndex] = gain * 1.2f;
+        self.eqRight->bands[bandIndex] = gain * 1.2f;
+    } else {
+        self.eqLeft->bands[bandIndex] = gain;
+        self.eqRight->bands[bandIndex] = gain;
+    }
     if (gain != 1.0f && self.eqLeft->enabled == false) {
         self.eqLeft->enable(true);
         self.eqRight->enable(true);
