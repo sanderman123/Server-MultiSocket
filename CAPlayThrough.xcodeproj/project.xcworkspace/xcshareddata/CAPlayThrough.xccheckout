@@ -7,22 +7,18 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>917E9F5D-BC40-4682-BFBA-A951F58601CB</string>
 	<key>IDESourceControlProjectName</key>
-	<string>CAPlayThrough</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>1295FD80C17D1E8B4C5AFC48706A90C90693ACD4</key>
 		<string>https://github.com/sanderman123/Server-MultiSocket.git</string>
-		<key>85CEAA2B40F60D1ADE89F6B289E400FEE6526108</key>
-		<string>https://github.com/JesseHsiu/CAPlayThrough.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>CAPlayThrough.xcodeproj</string>
+	<string>CAPlayThrough.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>1295FD80C17D1E8B4C5AFC48706A90C90693ACD4</key>
 		<string>../..</string>
-		<key>85CEAA2B40F60D1ADE89F6B289E400FEE6526108</key>
-		<string>../../../CAPlayThrough</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/sanderman123/Server-MultiSocket.git</string>
@@ -36,17 +32,9 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>85CEAA2B40F60D1ADE89F6B289E400FEE6526108</string>
-			<key>IDESourceControlWCCName</key>
-			<string>CAPlayThrough</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>1295FD80C17D1E8B4C5AFC48706A90C90693ACD4</string>
 			<key>IDESourceControlWCCName</key>
-			<string>Server-MultiSocket</string>
+			<string>Server-LocalMix</string>
 		</dict>
 	</array>
 </dict>

@@ -74,6 +74,11 @@
 		C59D9A831AB837640005180F /* ClientModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = C59D9A811AB837640005180F /* ClientModel.mm */; };
 		C59D9A871AB84C9D0005180F /* AudioBufferManager.h in Headers */ = {isa = PBXBuildFile; fileRef = C59D9A851AB84C9D0005180F /* AudioBufferManager.h */; };
 		C59D9A881AB84C9D0005180F /* AudioBufferManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C59D9A861AB84C9D0005180F /* AudioBufferManager.m */; };
+		C5AEFA7D1ADCD9A700F72E75 /* cello.png in Resources */ = {isa = PBXBuildFile; fileRef = C5AEFA781ADCD9A700F72E75 /* cello.png */; };
+		C5AEFA7E1ADCD9A700F72E75 /* crowd1.png in Resources */ = {isa = PBXBuildFile; fileRef = C5AEFA791ADCD9A700F72E75 /* crowd1.png */; };
+		C5AEFA7F1ADCD9A700F72E75 /* ukelele.png in Resources */ = {isa = PBXBuildFile; fileRef = C5AEFA7A1ADCD9A700F72E75 /* ukelele.png */; };
+		C5AEFA801ADCD9A700F72E75 /* violin1.png in Resources */ = {isa = PBXBuildFile; fileRef = C5AEFA7B1ADCD9A700F72E75 /* violin1.png */; };
+		C5AEFA811ADCD9A700F72E75 /* violin2.png in Resources */ = {isa = PBXBuildFile; fileRef = C5AEFA7C1ADCD9A700F72E75 /* violin2.png */; };
 		C5C4A5EC1ACD3A8B00D80F9F /* bassguitar1.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5DD1ACD3A8B00D80F9F /* bassguitar1.png */; };
 		C5C4A5ED1ACD3A8B00D80F9F /* drum1.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5DE1ACD3A8B00D80F9F /* drum1.png */; };
 		C5C4A5EE1ACD3A8B00D80F9F /* drum2.png in Resources */ = {isa = PBXBuildFile; fileRef = C5C4A5DF1ACD3A8B00D80F9F /* drum2.png */; };
@@ -183,6 +188,11 @@
 		C59D9A811AB837640005180F /* ClientModel.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = ClientModel.mm; sourceTree = "<group>"; };
 		C59D9A851AB84C9D0005180F /* AudioBufferManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioBufferManager.h; sourceTree = "<group>"; };
 		C59D9A861AB84C9D0005180F /* AudioBufferManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioBufferManager.m; sourceTree = "<group>"; };
+		C5AEFA781ADCD9A700F72E75 /* cello.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cello.png; path = images/cello.png; sourceTree = "<group>"; };
+		C5AEFA791ADCD9A700F72E75 /* crowd1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = crowd1.png; path = images/crowd1.png; sourceTree = "<group>"; };
+		C5AEFA7A1ADCD9A700F72E75 /* ukelele.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ukelele.png; path = images/ukelele.png; sourceTree = "<group>"; };
+		C5AEFA7B1ADCD9A700F72E75 /* violin1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = violin1.png; path = images/violin1.png; sourceTree = "<group>"; };
+		C5AEFA7C1ADCD9A700F72E75 /* violin2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = violin2.png; path = images/violin2.png; sourceTree = "<group>"; };
 		C5C4A5DD1ACD3A8B00D80F9F /* bassguitar1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bassguitar1.png; path = images/bassguitar1.png; sourceTree = "<group>"; };
 		C5C4A5DE1ACD3A8B00D80F9F /* drum1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = drum1.png; path = images/drum1.png; sourceTree = "<group>"; };
 		C5C4A5DF1ACD3A8B00D80F9F /* drum2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = drum2.png; path = images/drum2.png; sourceTree = "<group>"; };
@@ -349,6 +359,11 @@
 				C5C4A5EB1ACD3A8B00D80F9F /* westernguitar1.png */,
 				C577896F1A80D6B400E36B5A /* black.jpeg */,
 				C577896D1A80D44800E36B5A /* music-note.png */,
+				C5AEFA781ADCD9A700F72E75 /* cello.png */,
+				C5AEFA791ADCD9A700F72E75 /* crowd1.png */,
+				C5AEFA7A1ADCD9A700F72E75 /* ukelele.png */,
+				C5AEFA7B1ADCD9A700F72E75 /* violin1.png */,
+				C5AEFA7C1ADCD9A700F72E75 /* violin2.png */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				2B9BE3BD17E7E5C200927DE6 /* MainMenu.xib */,
@@ -552,12 +567,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				C5C4A5F41ACD3A8B00D80F9F /* singer.png in Resources */,
+				C5AEFA811ADCD9A700F72E75 /* violin2.png in Resources */,
+				C5AEFA7F1ADCD9A700F72E75 /* ukelele.png in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				C5C4A5FA1ACD3A8B00D80F9F /* westernguitar1.png in Resources */,
+				C5AEFA7D1ADCD9A700F72E75 /* cello.png in Resources */,
 				C5C4A5ED1ACD3A8B00D80F9F /* drum1.png in Resources */,
 				C5C4A5F91ACD3A8B00D80F9F /* singer5.png in Resources */,
 				C577896E1A80D44800E36B5A /* music-note.png in Resources */,
 				2B9BE3BF17E7E5C200927DE6 /* MainMenu.xib in Resources */,
+				C5AEFA7E1ADCD9A700F72E75 /* crowd1.png in Resources */,
 				C5C4A5F11ACD3A8B00D80F9F /* electricguitar3.png in Resources */,
 				C5C4A5F61ACD3A8B00D80F9F /* singer2.png in Resources */,
 				C57789701A80D6B400E36B5A /* black.jpeg in Resources */,
@@ -565,6 +584,7 @@
 				C5C4A5F71ACD3A8B00D80F9F /* singer3.png in Resources */,
 				C5C4A5F21ACD3A8B00D80F9F /* guitar1.png in Resources */,
 				C5C4A5EF1ACD3A8B00D80F9F /* electricguitar1.png in Resources */,
+				C5AEFA801ADCD9A700F72E75 /* violin1.png in Resources */,
 				C5C4A5F31ACD3A8B00D80F9F /* piano1.png in Resources */,
 				C5C4A5F51ACD3A8B00D80F9F /* singer1.png in Resources */,
 				C5C4A5F81ACD3A8B00D80F9F /* singer4.png in Resources */,
