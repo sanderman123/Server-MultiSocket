@@ -727,6 +727,7 @@ OSStatus CAPlayThrough::InputProc(void *inRefCon,
     //    tmp.init;
     //This->mInputBuffer = TransferAudioBuffer(This->tmp, This->mInputBuffer);
     //if (This->isAlreadyCreated== false) {
+//    printf("Transferring Audio Buffer...");
     TransferAudioBuffer(This->tmp, This->mInputBuffer);
     
     checkErr(err);
@@ -735,9 +736,9 @@ OSStatus CAPlayThrough::InputProc(void *inRefCon,
     
 //    This->mInputBuffer =
 		
-	if(!err) {
-		err = This->mBuffer->Store(This->mInputBuffer, Float64(inNumberFrames), SInt64(inTimeStamp->mSampleTime));
-	}	
+//	if(!err) {
+//		err = This->mBuffer->Store(This->mInputBuffer, Float64(inNumberFrames), SInt64(inTimeStamp->mSampleTime));
+//	}	
 
     
 	return err;
@@ -844,7 +845,9 @@ void CAPlayThroughHost::CreatePlayThrough(AudioDeviceID input, AudioDeviceID out
 {
 	mPlayThrough = new CAPlayThrough(input, output);
     StreamListenerQueue = dispatch_queue_create("com.CAPlayThough.StreamListenerQueue", DISPATCH_QUEUE_SERIAL);
-    //if (StreamListenerQueue) dispatch_set_context(StreamListenerQueue, this);
+    TransferAudioBufferQueue = dispatch_queue_create("com.CAPlayThough.TransferAudioBufferQueue", DISPATCH_QUEUE_SERIAL);
+    
+//    if (StreamListenerQueue) dispatch_set_context(StreamListenerQueue, this);
 	AddDeviceListeners(input);
 }
 

@@ -90,6 +90,19 @@ static void	BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		exit(1);
 	}
     
+    NSString *type = @"TestingProtocol";
+    
+    Bonjourserver = [[BonjourServer alloc] initWithProtocol:type];
+    Bonjourserver.delegate = self;
+    NSError *error = nil;
+    if(![Bonjourserver start:&error]) {
+        NSLog(@"error = %@", error);
+    }
+    else{
+        NSLog(@"success");
+    }
+    
+    
     [CAPlayThroughObjC sharedCAPlayThroughObjC:playthrough];
 }
 
@@ -193,6 +206,74 @@ static void	BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 			[menu selectItemAtIndex: index];
 		}
 	}
+}
+
+#pragma mark -
+#pragma mark Server delegate methods
+
+- (void)serverRemoteConnectionComplete:(Server *)server
+{
+    NSLog(@"Connected to service");
+    
+    //    self.isConnectedToService = YES;
+    //
+    //    connectedRow = selectedRow;
+    //    [tableView reloadData];
+}
+
+- (void)serverStopped:(Server *)server
+{
+    NSLog(@"Disconnected from service");
+    
+    //    self.isConnectedToService = NO;
+    //
+    //    connectedRow = -1;
+    //    [tableView reloadData];
+}
+
+- (void)server:(Server *)server didNotStart:(NSDictionary *)errorDict
+{
+    NSLog(@"Server did not start %@", errorDict);
+}
+
+- (void)server:(Server *)server didAcceptData:(NSData *)data
+{
+    NSLog(@"Server did accept data %@", data);
+    //    NSString *message = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+    //    if(nil != message || [message length] > 0) {
+    //        self.message = message;
+    //    } else {
+    //        self.message = @"no data received";
+    //    }
+}
+
+- (void)server:(Server *)server lostConnection:(NSDictionary *)errorDict
+{
+    NSLog(@"Lost connection");
+    
+    //    self.isConnectedToService = NO;
+    //    connectedRow = -1;
+    //    [tableView reloadData];
+}
+
+- (void)serviceAdded:(NSNetService *)service moreComing:(BOOL)more
+{
+    NSLog(@"Added a service: %@", [service name]);
+    
+    //    [self.services addObject:service];
+    //    if(!more) {
+    //        [tableView reloadData];
+    //    }
+}
+
+- (void)serviceRemoved:(NSNetService *)service moreComing:(BOOL)more
+{
+    NSLog(@"Removed a service: %@", [service name]);
+    
+    //    [self.services removeObject:service];
+    //    if(!more) {
+    //        [tableView reloadData];
+    //    }
 }
 
 @end

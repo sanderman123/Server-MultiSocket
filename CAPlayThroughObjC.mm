@@ -10,15 +10,20 @@
 #import "CAPlayThroughObjC.h"
 
 @implementation CAPlayThroughObjC
+
+
 static CAPlayThroughObjC* _sharedCAPlayThroughObjC = nil;
-@synthesize server;
+/** The data byte size of 1 channel in the AudioBufferList */
+const int DATA_SIZE_1_CHN = 64;
+bool flag;
+@synthesize udpServer;
+@synthesize tcpServer;
 @synthesize serverStarted;
 @synthesize streaming;
 @synthesize btnStartStream;
 @synthesize btnStartServer;
 @synthesize tfPort;
-@synthesize channelNames;
-@synthesize channelImages;
+@synthesize channelsInfo;
 
 static int TextFieldContext = 0;
 
@@ -31,7 +36,7 @@ void TransferAudioBuffer (void *THIS,  AudioBufferList *list)
     //    }
     //    @autoreleasepool {
     
-    [(/*__bridge */id) THIS encodeAudioBufferList:list];
+    [(__bridge /*__bridge */id) THIS encodeAudioBufferList:list];
     
     
     //    list = [(id) self decodeAudioBufferList:tmp];
@@ -40,8 +45,9 @@ void TransferAudioBuffer (void *THIS,  AudioBufferList *list)
     
 }
 void* initializeInstance(void *THIS){
-    THIS = [CAPlayThroughObjC sharedCAPlayThroughObjC:nil];//[[CAPlayThroughObjC alloc]init];
-    [(/*__bridge */id)THIS initVariables];
+//    THIS = [CAPlayThroughObjC sharedCAPlayThroughObjC:nil];//[[CAPlayThroughObjC alloc]init];
+    THIS = (__bridge void*)[CAPlayThroughObjC sharedCAPlayThroughObjC:nil];//[[CAPlayThroughObjC alloc]init];
+    [(__bridge /*__bridge */id)THIS initVariables];
     return THIS;
 }
 +(CAPlayThroughObjC*)sharedCAPlayThroughObjC:(CAPlayThroughObjC*) Playthrough
@@ -60,14 +66,18 @@ void* initializeInstance(void *THIS){
 -(void)initVariables
 {
     if (abl == Nil) {
+        flag = false;
+        pepareAblThread = dispatch_queue_create("CAPlaythrough.prepareABL", NULL);
+        testThread = dispatch_queue_create("CAPlaythrough.testThread", NULL);
+        initializedAblArrays = false;
         abl = (AudioBufferList*) malloc(sizeof(AudioBufferList));
-        byteData = (Byte*) malloc(1024); //should maybe be a different value in the future
-        byteData2 = (Byte*) malloc(1024);
-        streaming = false;
-        server = [[[Server alloc] init] retain];
+        byteData = (Byte*) malloc(DATA_SIZE_1_CHN*8); //should maybe be a different value in the future
+        byteData2 = (Byte*) malloc(DATA_SIZE_1_CHN*8);
         
 //        NSURL *furl = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:@"black.jpeg"]];
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"music-note" ofType:@"png"];
+        NSString *folderPath = [NSString stringWithFormat:@"%@/images", [[NSBundle mainBundle] bundlePath]];
+        NSString *path = [NSString stringWithFormat:@"%@/singer1.png",folderPath];
+//        NSString *path = [[NSBundle mainBundle] pathForResource:@"music-note" ofType:@"png"];
         NSURL *furl = [NSURL fileURLWithPath: path];
         defaultImage = [[NSImage alloc] init];
         [defaultImage initWithContentsOfURL:furl];
@@ -89,41 +99,182 @@ void* initializeInstance(void *THIS){
         
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(controlTextDidEndEditing:) name:NSControlTextDidChangeNotification object:nil];
-
+        
+        self.audioController = [[AEAudioController alloc] initWithAudioDescription:[AEAudioController nonInterleavedFloatStereoAudioDescription]];
+//        self.audioController.preferredBufferDuration = 0.0029;
+//        self.audioController.preferredBufferDuration = 0.00145;
+//        self.audioController.preferredBufferDuration = 0.000725;
+//        self.audioController.preferredBufferDuration = 0.0003625;
+        
+//        //Add channels and players
+        player = [[MyAudioPlayer alloc] init];
+        channel = [self.audioController createChannelGroup];
+        //add channel i with player i to the audio controller as a new channel
+        [self.audioController addChannels:[NSArray arrayWithObject:player] toChannelGroup: channel];
+        float vol = 1.0;
+        //Initialize channel volumes
+        [self.audioController setVolume:vol forChannelGroup:channel];
+        [self.audioController setPan:0.0 forChannelGroup:channel];
+        NSError *error = [NSError alloc];
+        if(![self.audioController start:&error]){
+            NSLog(@"Error starting AudioController: %@", error.localizedDescription);
+        }
+        clients = [[NSMutableArray alloc]init];
     }
 }
 
 - (void)encodeAudioBufferList:(AudioBufferList *)ablist {
-    //NSMutableData *data = [NSMutableData data];
-    if(streaming == true){
-        if(mutableData == nil){
-            mutableData = [NSMutableData data];
-        } else {
-            [mutableData setLength:0];
-        }
+    dispatch_sync(pepareAblThread, ^{
         
-        for (UInt32 y = 0; y < ablist->mNumberBuffers; y++){
-            AudioBuffer ab = ablist->mBuffers[y];
-            Float32 *frame = (Float32*)ab.mData;
-            [mutableData appendBytes:frame length:ab.mDataByteSize];
-        }
+//        [player addToBufferWithoutTimeStampAudioBufferList:ablist];
         
-        [server sendToAll:mutableData];
-        // return mutableData;
-    } else if (serverStarted && !initializedChannels){
-        initializedChannels = true;
+        //NSMutableData *data = [NSMutableData data];
         
-        _numChannels = ablist->mNumberBuffers;
-        [_labelChannels setStringValue:[NSString stringWithFormat:@"%@ %i",_labelChannels.stringValue, _numChannels]];
-        channelNames = [[NSMutableArray alloc] init];
-        channelImages = [[NSMutableArray alloc] init];
-        NSLog(@"Numchannels %i", _numChannels);
-        for(int i = 0; i < _numChannels;i++){
-            [channelNames addObject:[NSString stringWithFormat:@"Channel %i",i+1]];
-            [channelImages addObject:defaultImage];
+        //    NSLog(@"Frame data size: %i",ablist->mBuffers[0].mDataByteSize*2);
+        if(streaming == true){
+            //        if(mutableData == nil){
+            //            mutableData = [NSMutableData data];
+            //        } else {
+            //            [mutableData setLength:0];
+            //        }
+            //
+            //        for (UInt32 y = 0; y < ablist->mNumberBuffers; y++){
+            //            AudioBuffer ab = ablist->mBuffers[y];
+            //            Float32 *frame = (Float32*)ab.mData;
+            //            [mutableData appendBytes:frame length:ab.mDataByteSize];
+            //        }
+            //
+            //        if (udp) {
+            //            [udpServer sendToAll:mutableData];
+            //        } else {
+            //            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            //                [tcpServer sendToAll:mutableData];
+            //            });
+            //        }
             
+            //        [udpServer sendToAll:mutableData];
+            //        tcpServer.audioDataFlag = 1;
+            //        [dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0) addope]
+            // return mutableData;
+        } else if (serverStarted && !initializedChannels){
+            initializedChannels = true;
+            
+            _numChannels = ablist->mNumberBuffers;
+            [_labelChannels setStringValue:[NSString stringWithFormat:@"%@ %i",_labelChannels.stringValue, _numChannels]];
+            
+            channelsInfo = [[NSMutableArray alloc]init];
+            NSLog(@"Numchannels %i", _numChannels);
+            
+            //NSDictionary *dict = [[NSDictionary alloc]init];
+            for(int i = 0; i < _numChannels;i++){
+                //  [dict setValue:[NSString stringWithFormat:@"Channel %i",i+1] forKey:@"name"];
+                //            [dict setValue:@"123" forKey:@"name"];
+                //            [dict initWithObjectsAndKeys:[NSString stringWithFormat:@"Channel %i",i+1] ?: [NSNull null], @"name", nil];
+                NSMutableDictionary *dict = [[NSMutableDictionary alloc]initWithObjectsAndKeys:[NSString stringWithFormat:@"Channel %i",i+1],@"name", nil];
+                NSDictionary *imgDict = [[NSDictionary alloc] initWithObjectsAndKeys:@"music-note",@"fileName",@"png",@"fileExtension", nil];
+                [dict setObject:imgDict forKey:@"image"];
+                //[NSDictionary        dictionaryWithObject:@"Cannel X" forKey:@"name"];
+                //            dict = @{ @"name" :[NSString stringWithFormat:@"Channel %i",i+1]};
+                [channelsInfo addObject:dict];
+                //[dict autorelease];
+            }
+            
+            //        clientMixer = [[ClientMixer alloc]initWithAudioController:self.audioController NumberOfChannels:_numChannels];
+            //        [self.audioController addOutputReceiver:clientMixer forChannelGroup:channel];
+            NSLog(@"audioController num channels: %lu",(unsigned long)self.audioController.channels.count);
+            //        [_audioController addChannels:[NSArray arrayWithObject:clientMixer.player] toChannelGroup:channel];
+            
+            
+            ablArray1 = [[NSMutableArray alloc]init];
+            for (int i = 0; i < _numChannels; i++) {
+                AudioBufferManager *abm = [[AudioBufferManager alloc]init];
+                abm.buffer = AEAllocateAndInitAudioBufferList(self.audioController.audioDescription, DATA_SIZE_1_CHN);
+                [ablArray1 addObject:abm];
+            }
+            ablArray2 = [[NSMutableArray alloc]init];
+            for (int i = 0; i < _numChannels; i++) {
+                AudioBufferManager *abm = [[AudioBufferManager alloc]init];
+                abm.buffer = AEAllocateAndInitAudioBufferList(self.audioController.audioDescription, DATA_SIZE_1_CHN);
+                [ablArray2 addObject:abm];
+            }
+            
+            initializedAblArrays = true;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_sharedCAPlayThroughObjC initTables];
+            });
+            
+        } else if(initializedAblArrays){
+            flag = !flag;
+            if (flag) {
+                //Devide the ABL into one stereo ABL per channel
+                for (int i = 0; i < _numChannels; i++) {
+                    //ablist->mBuffers[i]
+                    ((AudioBufferManager*)[ablArray1 objectAtIndex:i]).buffer->mBuffers[0] = ablist->mBuffers[i];
+                    ((AudioBufferManager*)[ablArray1 objectAtIndex:i]).buffer->mBuffers[1] = ablist->mBuffers[i];
+                }
+                for (int i = 0; i < (int)clients.count; i++) {
+                    [[clients objectAtIndex:i] mixAudioBufferListArray:ablArray1];
+                }
+                //            [clientMixer mixAudioBufferListArray:ablArray1];
+            } else {
+                for (int i = 0; i < _numChannels; i++) {
+                    //ablist->mBuffers[i]
+                    ((AudioBufferManager*)[ablArray2 objectAtIndex:i]).buffer->mBuffers[0] = ablist->mBuffers[i];
+                    ((AudioBufferManager*)[ablArray2 objectAtIndex:i]).buffer->mBuffers[1] = ablist->mBuffers[i];
+                }
+                for (int i = 0; i < (int)clients.count; i++) {
+                    [[clients objectAtIndex:i] mixAudioBufferListArray:ablArray2];
+                }
+                //            [clientMixer mixAudioBufferListArray:ablArray2];
+            }
         }
-    }
+    });
+}
+
+-(void)initTables
+{
+    clientsTableContainer = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 0, 148, 200)];
+    clientsTableView = [[NSTableView alloc]initWithFrame:NSMakeRect(0, 0, 148, 200)];
+    
+    [clientsTableView setDataSource:self];
+    [clientsTableView setDelegate:self];
+    
+    NSTableColumn * column1 = [[NSTableColumn alloc] initWithIdentifier:@"www"];
+    [[column1 headerCell] setStringValue:@"Connected Clients"];
+    [column1 setWidth:148];
+    [clientsTableView addTableColumn:column1];
+    //    [tableview reloadData];
+    
+    [clientsTableContainer setDocumentView:clientsTableView];
+    [clientsTableContainer setHasVerticalScroller:YES];
+    [_sharedCAPlayThroughObjC addSubview:clientsTableContainer];
+    clientsTableView.tag = 0;
+    
+    channelsTableContainer = [[NSScrollView alloc] initWithFrame:NSMakeRect(200, 0, 230, 200)];
+    channelsTableView = [[NSTableView alloc]initWithFrame:NSMakeRect(0, 0, 230, 200)];
+    [channelsTableView setDataSource:self];
+    [channelsTableView setDelegate:self];
+    
+    NSTableColumn * columnIndex = [[NSTableColumn alloc] initWithIdentifier:@"index"];
+    NSTableColumn * columnName = [[NSTableColumn alloc] initWithIdentifier:@"name"];
+    NSTableColumn * columnImage = [[NSTableColumn alloc] initWithIdentifier:@"image"];
+    [[columnIndex headerCell] setStringValue:@"No"];
+    [[columnName headerCell] setStringValue:@"Name"];
+    [[columnImage headerCell] setStringValue:@"Img"];
+    [columnIndex setWidth:20];
+    [columnName setWidth:160];
+    [columnImage setWidth:20];
+    [channelsTableView addTableColumn:columnIndex];
+    [channelsTableView addTableColumn:columnName];
+    [channelsTableView addTableColumn:columnImage];
+    
+    [channelsTableContainer setDocumentView:channelsTableView];
+    [channelsTableContainer setHasVerticalScroller:YES];
+    [_sharedCAPlayThroughObjC addSubview:channelsTableContainer];
+    
+    [channelsTableView setDoubleAction:@selector(doubleClick:)];
+    channelsTableView.tag = 1;
+    [channelsTableView reloadData];
 }
 
 - (AudioBufferList *)decodeAudioBufferList:(NSData *)data {
@@ -185,57 +336,24 @@ void* initializeInstance(void *THIS){
 
 -(void)btnStartServerClicked:(id)sender{
     serverStarted = true;
-    [server createServerOnPort:[tfPort intValue]];
+    udp = true;
+    streaming = false;
+    udpServer = [[Server alloc] init];
+    [udpServer createServerOnPort:[tfPort intValue]];
+    
+    if (udp) {
+
+    } else {
+        tcpServer = [[TCPServer alloc] init];
+        [tcpServer startServerOnPort:[tfPort intValue]];
+    }
     
 //    NSLog(@"Numchannels: %i", _numChannels);
 //    channelNames = [[NSMutableArray alloc] init];
 //    for(int i = 0; i < _numChannels;i++){
 //        [channelNames addObject:[NSString stringWithFormat:@"Channel %i",i]];
 //    }
-    
-    clientsTableContainer = [[NSScrollView alloc] initWithFrame:NSMakeRect(0, 0, 148, 200)];
-    clientsTableView = [[NSTableView alloc]initWithFrame:NSMakeRect(0, 0, 148, 200)];
-    
-    [clientsTableView setDataSource:self];
-    [clientsTableView setDelegate:self];
-    
-    NSTableColumn * column1 = [[NSTableColumn alloc] initWithIdentifier:@"www"];
-    [[column1 headerCell] setStringValue:@"Connected Clients"];
-    [column1 setWidth:148];
-    [clientsTableView addTableColumn:column1];
-    //    [tableview reloadData];
-    
-    [clientsTableContainer setDocumentView:clientsTableView];
-    [clientsTableContainer setHasVerticalScroller:YES];
-    [_sharedCAPlayThroughObjC addSubview:clientsTableContainer];
-    clientsTableView.tag = 0;
-    
-    channelsTableContainer = [[NSScrollView alloc] initWithFrame:NSMakeRect(200, 0, 230, 200)];
-    channelsTableView = [[NSTableView alloc]initWithFrame:NSMakeRect(0, 0, 230, 200)];
-    
-    [channelsTableView setDataSource:self];
-    [channelsTableView setDelegate:self];
-    
-    NSTableColumn * columnIndex = [[NSTableColumn alloc] initWithIdentifier:@"index"];
-    NSTableColumn * columnName = [[NSTableColumn alloc] initWithIdentifier:@"name"];
-    NSTableColumn * columnImage = [[NSTableColumn alloc] initWithIdentifier:@"image"];
-    [[columnIndex headerCell] setStringValue:@"No"];
-    [[columnName headerCell] setStringValue:@"Name"];
-    [[columnImage headerCell] setStringValue:@"Img"];
-    [columnIndex setWidth:20];
-    [columnName setWidth:160];
-    [columnImage setWidth:20];
-    [channelsTableView addTableColumn:columnIndex];
-    [channelsTableView addTableColumn:columnName];
-    [channelsTableView addTableColumn:columnImage];
-    
-    [channelsTableContainer setDocumentView:channelsTableView];
-    [channelsTableContainer setHasVerticalScroller:YES];
-    [_sharedCAPlayThroughObjC addSubview:channelsTableContainer];
-    
-    [channelsTableView setDoubleAction:@selector(doubleClick:)];
-    channelsTableView.tag = 1;
-    [channelsTableView reloadData];
+
 }
 
 -(void)btnStartStreamClicked:(id)sender{
@@ -262,8 +380,8 @@ void* initializeInstance(void *THIS){
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
     if(tableView.tag == 0){
-        NSMutableArray *names = [server getClientNames];
-        NSLog(@"%lu",(unsigned long)[names count]);
+        NSMutableArray *names = [udpServer getClientNames];
+        NSLog(@"Number of Clients: %lu",(unsigned long)[names count]);
         return [names count];
     } else {
         return _numChannels;
@@ -299,14 +417,14 @@ void* initializeInstance(void *THIS){
 }
 - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    NSTextField *result = [[tableView makeViewWithIdentifier:@"MainCell" owner:self] autorelease];
+    NSTextField *result = [tableView makeViewWithIdentifier:@"MainCell" owner:self] ;
     if (result == nil) {
         result = [[NSTextField alloc] initWithFrame:NSMakeRect(0, 0, 148, 10)];
         result.identifier = @"MainCell";
         result.bordered = false;
     }
     if(tableView.tag == 0){
-        NSMutableArray *names = [server getClientNames];
+        NSMutableArray *names = [udpServer getClientNames];
         result.stringValue = [names objectAtIndex:row];
         
         // Return the result
@@ -314,11 +432,11 @@ void* initializeInstance(void *THIS){
         if(tableView.tableColumns[0] == tableColumn){
             result.stringValue = [NSString stringWithFormat:@"%li",row + 1];
         } else if(tableView.tableColumns[1] == tableColumn){
-            result.stringValue = [channelNames objectAtIndex:row];
+            result.stringValue = [[channelsInfo objectAtIndex:row] objectForKey:@"name"];
         } else {
-            if((int)channelImages.count == _numChannels){
+            if((int)[channelsInfo count] == _numChannels){
                 NSImageView *image = [[NSImageView alloc] initWithFrame:NSMakeRect(0, 0, 20, 20)];
-                [image setImage:[channelImages objectAtIndex:row]];
+                [image setImage:[NSImage imageNamed:[NSString stringWithFormat:@"%@.%@",[[[channelsInfo objectAtIndex:row] objectForKey:@"image"] objectForKey:@"fileName"],[[[channelsInfo objectAtIndex:row] objectForKey:@"image"] objectForKey:@"fileExtension"]]]];
                 return image;
             }
         }
@@ -332,13 +450,23 @@ void* initializeInstance(void *THIS){
 
 -(void)controlTextDidEndEditing:(NSNotification *)obj{
     NSString *string = [[[obj object] selectedCell] stringValue];
-    [channelNames replaceObjectAtIndex:(NSUInteger)selectedRow withObject:string];
+    
+    [[channelsInfo objectAtIndex:(NSUInteger)selectedRow] setObject:string forKey:@"name"];
+    
+//    [channelNames replaceObjectAtIndex:(NSUInteger)selectedRow withObject:string];
     //inform clients of new channel name
-    [server sendUpdateToClients];
+    [udpServer sendUpdateToClients];
+//    tcpServer.audioDataFlag = 0;
+//    [tcpServer sendUpdateToClients];
 }
 
 -(void)refreshConnectedClients{
     [clientsTableView reloadData];
+}
+
+-(void)addConnectedClientWithInfo:(NSMutableDictionary *)clientInfoDict{
+    ClientModel *client = [[ClientModel alloc]initWithAudioController:self.audioController NumberOfChannels:self.numChannels ClientInfo:clientInfoDict];
+    [clients addObject:client];
 }
 
 - (void)doubleClick:(id)object {
@@ -349,7 +477,6 @@ void* initializeInstance(void *THIS){
         
         if(colNumber == 2){
             NSImage *image = [[NSImage alloc]init];
-            image = [[NSImage alloc]init];
             
             NSOpenPanel *panel = [NSOpenPanel openPanel];
             [panel setCanChooseFiles:YES];
@@ -361,7 +488,7 @@ void* initializeInstance(void *THIS){
             NSString *fileExtension = [[NSString alloc] init];
             
             if (clicked == NSFileHandlingPanelOKButton) {
-                for (NSURL *url in [panel URLs]) {
+                for (__strong NSURL *url in [panel URLs]) {
                     [image initWithContentsOfURL:url];
                     fileExtension = [url pathExtension];
                     url = [url URLByDeletingPathExtension];
@@ -370,11 +497,29 @@ void* initializeInstance(void *THIS){
                     // do something with the url here.
                     //image = [[NSImage alloc] initWithContentsOfURL:url];
                 }
-                [channelImages replaceObjectAtIndex:rowNumber withObject:image];
+                
+                NSDictionary *dict = [[NSDictionary alloc]initWithObjectsAndKeys:fileName,@"fileName",fileExtension,@"fileExtension", nil];
+                
+                
+                [[channelsInfo objectAtIndex:rowNumber] setObject:dict forKey:@"image"];
+                
+//                [channelImages replaceObjectAtIndex:rowNumber withObject:image];
 //                [server sendChannelImageToClients:image index:rowNumber];
-                [server sendChannelImageToClients:fileName format:fileExtension index:rowNumber];
-                [channelsTableView reloadData];
+                [udpServer sendUpdateToClients];
+//                tcpServer.audioDataFlag = 0;
+//                [tcpServer sendChannelImageToClients:fileName format:fileExtension index:rowNumber];
+                    [channelsTableView reloadData];
             }
+        }
+    }
+}
+
+-(void)updateClientChannelInfo:(NSData *)infoData{
+    NSDictionary *infoDict = [NSJSONSerialization JSONObjectWithData:infoData options:0 error:nil];
+    for (int i = 0; i < (int)clients.count; i++) {
+        ClientModel *cm = (ClientModel*)[clients objectAtIndex:i];
+        if([cm.uuid isEqualToString:[infoDict objectForKey:@"uuid"]]){
+            [cm updateChannelSettings:infoDict];
         }
     }
 }

@@ -12,8 +12,14 @@
 #import "CAPlayThroughObjCinterface.h"
 #import <Cocoa/Cocoa.h>
 
+#import "TheAmazingAudioEngine/TheAmazingAudioEngine.h"
+#import "MyAudioPlayer.h"
+#import "ClientModel.h"
+#import "AudioBufferManager.h"
+
 #import "GCDAsyncUdpSocket.h"
 #import "Server.h"
+#import "TCPServer.h"
 
 // An Objective-C class that needs to be accessed from C++
 @interface CAPlayThroughObjC : NSView<NSTableViewDataSource,NSTableViewDelegate>
@@ -34,15 +40,28 @@
     NSImage *defaultImage;
 
     bool initializedChannels;
+    bool initializedAblArrays;
     int selectedRow;
+    
+    bool udp;
+    
+    MyAudioPlayer *player;
+    AEChannelGroupRef channel;
+//    ClientMixer *clientMixer;
+    NSMutableArray *clients;
+    NSMutableArray *ablArray1;
+    NSMutableArray *ablArray2;
+    
+    dispatch_queue_t pepareAblThread;
+    dispatch_queue_t testThread;
 }
-
-@property (nonatomic,strong) Server* server;
+@property (nonatomic,strong) AEAudioController *audioController;
+@property (nonatomic,strong) Server* udpServer;
+@property (nonatomic,strong) TCPServer* tcpServer;
 @property (nonatomic,assign) bool streaming;
 @property (nonatomic,assign) bool serverStarted;
 @property (nonatomic, assign) int numChannels;
-@property (nonatomic, assign) NSMutableArray *channelNames;
-@property (nonatomic, assign) NSMutableArray *channelImages;
+@property (nonatomic, strong) NSMutableArray *channelsInfo;
 //+(CAPlayThroughObjC*)sharedCAPlayThroughObjC;
 +(CAPlayThroughObjC*)sharedCAPlayThroughObjC:(CAPlayThroughObjC*) Playthrough;
 
@@ -51,6 +70,8 @@
 - (AudioBufferList *) decodeAudioBufferList: (NSData *) data;
 
 - (void) refreshConnectedClients;
+- (void) addConnectedClientWithInfo:(NSMutableDictionary*)clientInfoDict;
+- (void) updateClientChannelInfo:(NSData*)infoData;
 - (void)doubleClick:(id)nid;
 
 @property (nonatomic, strong)IBOutlet NSButton *btnStartServer;

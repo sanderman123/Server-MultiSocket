@@ -106,6 +106,7 @@ private:
                                    void* inClientData);*/
     
     dispatch_queue_t StreamListenerQueue;
+    dispatch_queue_t TransferAudioBufferQueue;
     AudioObjectPropertyListenerBlock StreamListenerBlock;
     
 private:
